@@ -26,7 +26,7 @@ module.exports = {
     // set the channel id
     let channelID = channel.id;
     // save in the config file the channel id in a array called LOG-CHANNEL
-    config.LOG_CHANNEL = channelID;
+    config.TICKET['LOG-CHANNEL'] = channelID;
     // save the config file
     require('fs').writeFile('./config/config.json', JSON.stringify(config), (err) => {
         if (err) console.log(err);
