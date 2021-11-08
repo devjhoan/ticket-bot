@@ -1,0 +1,46 @@
+{
+    "TOKEN": "TOKEN_HERE",
+    "GUILD-ID" : "GUILD_ID_HERE",
+    "MONGOOSECONNECTIONSTRING": "NO_USE_MOONGOSE",
+    "PREFIX": "$",
+    "TICKET" : {
+        "SERVER-NAME" : "SERVER_NAME_HERE",
+        "TRANSCRIPT-CHANNEL" : "TRANSCRIPT_CHANNELID_HERE",
+        "LOG-CHANNEL" : "LOG_CHANNELID_HERE",
+        "STAFF-ROLE" : "STAFF_ROLEID_HERE",
+        "ADMIN-ROLE" : "ADMIN_ROLEID_HERE",
+        "HEAD-STAFF" : "HEADSTAFF_ROLEID_HERE",
+        "LOGS-SYSTEM" : true,
+        "USER-SEND-TRANSCRIPT" : true,
+        "MENTION-STAFF" : true
+    },
+    "TICKET-PANEL" : {
+        "NAME" : "NAME_PANEL_HERE",
+        "FOOTER" : "Support System",
+        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
+        "CATEGORY" : "CATEGORY_OPENTICKET",
+        "CUSTOM-ID" : "ticket-1"
+    },
+    "TICKET-PANEL-2" : {
+        "NAME" : "NAME_PANEL_HERE",
+        "FOOTER" : "Support System",
+        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
+        "CATEGORY" : "CATEGORY_OPENTICKET",
+        "CUSTOM-ID" : "ticket-2"
+    },
+    "TICKET-PANEL-3" : {
+        "NAME" : "NAME_PANEL_HERE",
+        "FOOTER" : "Support System",
+        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
+        "CATEGORY" : "CATEGORY_OPENTICKET",
+        "CUSTOM-ID" : "ticket-3"
+    },
+    "TICKET-PANEL-4" : {
+        "NAME" : "NAME_PANEL_HERE",
+        "FOOTER" : "Support System",
+        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
+        "CATEGORY" : "CATEGORY_OPENTICKET",
+        "CUSTOM-ID" : "ticket-4"
+    },
+    "VERSION" : "1.1"
+}
