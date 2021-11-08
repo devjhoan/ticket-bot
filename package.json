@@ -13,6 +13,7 @@
         "discord-html-transcripts": "^1.0.0",
         "discord.js": "^13.1.0",
         "glob": "^7.1.7",
+        "megadb": "^3.4.0",
         "mongoose": "^6.0.2"
     }
 }
