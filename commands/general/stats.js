@@ -1,8 +1,6 @@
 const { Client, Message, MessageEmbed } = require('discord.js');
 const config = require('../../config/config.json')
 
-const db = require('megadb');
-let ticketNumber = new db.crearDB('ticketNumber')
 module.exports = {
   name: "stats",
   aliases: ["statistics"],
@@ -19,21 +17,20 @@ module.exports = {
     }
     // send the cpu usage of the bot
     const embed = new MessageEmbed()
-        .setTitle("Statistics")
+        .setTitle("Bot Statistics")
         .setColor("AQUA")
         .setThumbnail(client.user.displayAvatarURL())
         .setFooter(`Requested by ${message.author.username}`, message.author.displayAvatarURL())
         .setTimestamp()
         .addField("CPU Usage", `${Math.round(process.cpuUsage().user / 1024 / 1024 * 100) / 100}%`, true)
         .addField("Memory Usage", `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100} MB`, true)
-        .addField("Users", client.users.cache.size, true)
-        .addField("Commands", client.commands.size, true)
-        .addField("Uptime", `${Math.round(client.uptime / 1000 / 60 / 60)} hours, ${Math.round(client.uptime / 1000 / 60 % 60)} minutes, ${Math.round(client.uptime / 1000 % 60)} seconds`, true)
+        .addField("Users", `${client.users.cache.size}`, true)
+        .addField("Commands", `${client.commands.size}`, true)
+        .addField("Uptime", `${Math.round(client.uptime / 1000 / 60 / 60)}h, ${Math.round(client.uptime / 1000 / 60 % 60)}m, ${Math.round(client.uptime / 1000 % 60)}s`, true)
         .addField("Discord.js Version", `${require('discord.js').version}`, true)
         .addField("Node.js Version", `${process.version}`, true)
         .addField("Bot Version", `${config.VERSION}`, true)
         .addField("Author", `Jhoan#6969`, true)
-        .addField("Tickets", await ticketNumber.get('tickets'), true)
     message.channel.send({
         embeds: [embed]
     })
