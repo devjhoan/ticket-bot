@@ -5,6 +5,9 @@ const mensajes = require('../../config/messages.json');
 
 client.on("interactionCreate", async (interaction) => {
     if(interaction.isButton()) {
+        if(interaction.customId === "CANCEL-TICKET-N") {
+            interaction.message.delete()
+        }
         if(interaction.customId === "DELETE-TICKET-N") {
             if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
                 return;
@@ -26,9 +29,6 @@ client.on("interactionCreate", async (interaction) => {
                     **Ticket Name**: ${interaction.channel.name}
                     **Ticket Owner**: <@!${interaction.channel.topic}>`)
                     .setFooter("Ticket System by: Jhoan#6969")]});
-                if(interaction.customId === "CANCEL-TICKET-N") {
-                    interaction.message.delete();
-                }
             }
             if(config.TICKET["LOGS-SYSTEM"] == false) {
                 if(interaction.customId === "CANCEL-TICKET-N") {
