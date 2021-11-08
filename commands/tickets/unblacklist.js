@@ -28,5 +28,18 @@ module.exports = {
         blacklist.eliminar(usuario.id)
         message.channel.send(`${usuario.tag} ha sido unblacklisteado!`)
     }
+    if(config.TICKET["LOGS-SYSTEM"] == true) {
+      client.channels.cache.get(config.TICKET['LOG-CHANNEL']).send({
+        embeds: [new MessageEmbed()
+          .setTitle("User Un-Blacklisted")
+          .setColor("AQUA")
+          .setTimestamp()
+          .setDescription("**Staff:** <@!"+ message.author.id+"> `["+ message.author.tag +"]`\n\n ```diff\n+ "+ usuario.tag +"\n- "+razon+"```")
+        ]
+      })
+    }
+    if(config.TICKET["LOGS-SYSTEM"] == false) {
+    return;
+    }
   },
 };
