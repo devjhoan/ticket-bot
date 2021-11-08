@@ -12,7 +12,7 @@
         "HEAD-STAFF" : "879596009511088219",
         "LOGS-SYSTEM" : true,
         "USER-SEND-TRANSCRIPT" : true,
-        "MENTION-STAFF" : true
+        "MENTION-STAFF" : false
     },
     "TICKET-PANEL" : {
         "NAME" : "General Support",

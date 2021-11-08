@@ -48,12 +48,7 @@ client.on("interactionCreate", async (interaction) => {
                     .setStyle("SECONDARY")
                     .setLabel("Claim")
                     .setEmoji("👋")
-                    .setCustomId("Ticket-Claimed"),
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Head Staff")
-                    .setEmoji("880997902351208459")
-                    .setCustomId("TR-HEAD-STAFF"),
+                    .setCustomId("Ticket-Claimed")
                 )
                 const welcome = new MessageEmbed()
                     .setTitle(`"+config.TICKET["SERVER-NAME"]+" | Support Center`)
@@ -133,12 +128,7 @@ client.on("interactionCreate", async (interaction) => {
                     .setStyle("SECONDARY")
                     .setLabel("Claim")
                     .setEmoji("👋")
-                    .setCustomId("Ticket-Claimed"),
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Head Staff")
-                    .setEmoji("880997902351208459")
-                    .setCustomId("TR-HEAD-STAFF"),
+                    .setCustomId("Ticket-Claimed")
                 )
                 const welcome = new MessageEmbed()
                 .setTitle(`"+config.TICKET["SERVER-NAME"]+" | Support Center`)
@@ -218,12 +208,7 @@ client.on("interactionCreate", async (interaction) => {
                     .setStyle("SECONDARY")
                     .setLabel("Claim")
                     .setEmoji("👋")
-                    .setCustomId("Ticket-Claimed"),
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Head Staff")
-                    .setEmoji("880997902351208459")
-                    .setCustomId("TR-HEAD-STAFF"),
+                    .setCustomId("Ticket-Claimed")
                 )
                 const welcome = new MessageEmbed()
                 .setTitle(`"+config.TICKET["SERVER-NAME"]+" | Support Center`)
@@ -303,12 +288,7 @@ client.on("interactionCreate", async (interaction) => {
                     .setStyle("SECONDARY")
                     .setLabel("Claim")
                     .setEmoji("👋")
-                    .setCustomId("Ticket-Claimed"),
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Head Staff")
-                    .setEmoji("880997902351208459")
-                    .setCustomId("TR-HEAD-STAFF"),
+                    .setCustomId("Ticket-Claimed")
                 )
                 const welcome = new MessageEmbed()
                 .setTitle(`"+config.TICKET["SERVER-NAME"]+" | Support Center`)

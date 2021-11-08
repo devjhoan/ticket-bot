@@ -40,13 +40,7 @@ client.on("interactionCreate", async (interaction) => {
                     .setLabel("Claim")
                     .setEmoji("👋")
                     .setDisabled(true)
-                    .setCustomId("Ticket-Claimed"),
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Head Staff")
-                    .setEmoji("880997902351208459")
-                    .setDisabled(true)
-                    .setCustomId("TR-HEAD-STAFF"),
+                    .setCustomId("Ticket-Claimed")
             )
             interaction.message.edit({
                 components: [row]
