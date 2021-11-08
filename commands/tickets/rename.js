@@ -38,7 +38,7 @@ module.exports = {
             **User**: <@!${message.member.user.id}>
             **Action**: Rename a ticket!
             **Ticket Old Name**: ${channel.name}
-            **Ticket New Name**: ${await message.channel.name}
+            **Ticket New Name**: ticket-${newName}
             **Ticket Owner**: <@!${message.channel.topic}>`)
             .setFooter("Ticket System by: Jhoan#6969")]}
     )
