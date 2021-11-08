@@ -1,46 +1,46 @@
 {
-    "TOKEN": "TOKEN_HERE",
-    "GUILD-ID" : "GUILD_ID_HERE",
-    "MONGOOSECONNECTIONSTRING": "NO_USE_MOONGOSE",
+    "TOKEN": "ODc1MDcxOTQwMDkwNTQwMTI1.YRQMQA.HLZEs5-kBeLsDT9krIplQbr8PcQ",
+    "GUILD-ID" : "858822262740484127",
+    "MONGOOSECONNECTIONSTRING": "",
     "PREFIX": "$",
     "TICKET" : {
-        "SERVER-NAME" : "SERVER_NAME_HERE",
-        "TRANSCRIPT-CHANNEL" : "TRANSCRIPT_CHANNELID_HERE",
-        "LOG-CHANNEL" : "LOG_CHANNELID_HERE",
-        "STAFF-ROLE" : "STAFF_ROLEID_HERE",
-        "ADMIN-ROLE" : "ADMIN_ROLEID_HERE",
-        "HEAD-STAFF" : "HEADSTAFF_ROLEID_HERE",
+        "SERVER-NAME" : "Crowl Network",
+        "TRANSCRIPT-CHANNEL" : "880605805592870912",
+        "LOG-CHANNEL" : "900955083217453176",
+        "STAFF-ROLE" : "879596023062888488",
+        "ADMIN-ROLE" : "879596009511088219",
+        "HEAD-STAFF" : "879596009511088219",
         "LOGS-SYSTEM" : true,
         "USER-SEND-TRANSCRIPT" : true,
         "MENTION-STAFF" : true
     },
     "TICKET-PANEL" : {
-        "NAME" : "NAME_PANEL_HERE",
-        "FOOTER" : "Support System",
-        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
-        "CATEGORY" : "CATEGORY_OPENTICKET",
-        "CUSTOM-ID" : "ticket-1"
+        "NAME" : "General Support",
+        "FOOTER" : "Crowl Network - Support System",
+        "CATEGORY" : "885599679075725372",
+        "BUTTON-EMOJI" : "875531614686416917",
+        "CUSTOM-ID" : "general-support"
     },
     "TICKET-PANEL-2" : {
-        "NAME" : "NAME_PANEL_HERE",
-        "FOOTER" : "Support System",
-        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
-        "CATEGORY" : "CATEGORY_OPENTICKET",
-        "CUSTOM-ID" : "ticket-2"
+        "NAME" : "Buycraft Support",
+        "FOOTER" : "Crowl Network - Support System",
+        "BUTTON-EMOJI" : "875531713307111464",
+        "CATEGORY" : "885599679075725372",
+        "CUSTOM-ID" : "buycraft-support"
     },
     "TICKET-PANEL-3" : {
-        "NAME" : "NAME_PANEL_HERE",
-        "FOOTER" : "Support System",
-        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
-        "CATEGORY" : "CATEGORY_OPENTICKET",
-        "CUSTOM-ID" : "ticket-3"
+        "NAME" : "Ban Appeal Support",
+        "FOOTER" : "Crowl Network - Support System",
+        "BUTTON-EMOJI" : "875531633514655805",
+        "CATEGORY" : "885599679075725372",
+        "CUSTOM-ID" : "ban-appeal"
     },
     "TICKET-PANEL-4" : {
-        "NAME" : "NAME_PANEL_HERE",
-        "FOOTER" : "Support System",
-        "BUTTON-EMOJI" : "EMOJI_ID_HERE",
-        "CATEGORY" : "CATEGORY_OPENTICKET",
-        "CUSTOM-ID" : "ticket-4"
+        "NAME" : "Claim Rank Support",
+        "FOOTER" : "Crowl Network - Support System",
+        "BUTTON-EMOJI" : "902460007285653516",
+        "CATEGORY" : "885599679075725372",
+        "CUSTOM-ID" : "claim-rank"
     },
     "VERSION" : "1.1"
 }
