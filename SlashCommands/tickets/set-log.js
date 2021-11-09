@@ -11,9 +11,7 @@ module.exports = {
             description: "set the channel for logs system",
             type: "CHANNEL",
             // only allow text channels
-            options: {
-                type: "text"
-            },
+            channelTypes: ["GUILD_TEXT"],
             required: true
         }
     ],
