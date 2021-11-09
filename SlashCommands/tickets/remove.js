@@ -36,7 +36,7 @@ module.exports = {
         })
         const embed = new MessageEmbed()
         .setTitle("Support System :x:")
-        .setDescription(`> Staff:\n <@!${interaction.user.id}>\n> ${mensajes['TICEKT-REMOVED']}:\n<@!${(await client.users.fetch(removido)).id}>`)
+        .setDescription(`> Staff:\n <@!${interaction.user.id}>\n> ${mensajes['TICKET-REMOVED']}:\n<@!${(await client.users.fetch(removido)).id}>`)
         .setColor("DARK_RED")
         .setTimestamp()
         interaction.followUp({
