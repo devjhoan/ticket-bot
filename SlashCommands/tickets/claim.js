@@ -15,11 +15,8 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.CLAIM === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-        setTimeout(() => {
-            msg.delete()
-        }, 5000)
-        );        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
+        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true});
+        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
         const idmiembro = interaction.channel.topic;
         interaction.channel.permissionOverwrites.set([
           {
@@ -42,7 +39,7 @@ module.exports = {
       const embed = new MessageEmbed()
         .setDescription("```"+ mensajes['TICKET-CLAIMED'] +" "+ interaction.user.tag +"```")
         .setColor("GREEN")
-      interaction.followUp({
+      interaction.reply({
         embeds: [embed]
       }).then((msg) => {
         msg.react("👋")

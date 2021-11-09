@@ -23,24 +23,21 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.RENAME === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-        setTimeout(() => {
-            msg.delete()
-        }, 5000)
-        );        if(message.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
+        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        if(message.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
         let newName = interaction.options.getString('name');
         let channel = interaction.channel;
         if(!newName) {
             const embed2 = new MessageEmbed()
               .setDescription("```" +mensajes['NO-TICKET-RENAME']+ "```")
               .setColor("RED")
-            return interaction.followUp({embeds: [embed2]})
+            return interaction.reply({embeds: [embed2]})
         }
         channel.edit({name: `ticket-${newName}`}, "Ticket Rename")
         const renameado = new MessageEmbed()
         .setDescription("```"+ mensajes['TICKET-RENAMED'] +" ticket-"+ newName +"```")
         .setColor("GREEN")
-        interaction.followUp({embeds:[renameado]})
+        interaction.reply({embeds:[renameado]})
         if(config.TICKET["LOGS-SYSTEM"] == true) {
           client.channels.cache.get(config.TICKET["LOG-CHANNEL"]).send(
             {embeds: [new MessageEmbed()

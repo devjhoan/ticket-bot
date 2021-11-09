@@ -23,16 +23,12 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
     if(enable.COMMANDS.ALERT === false) return;
-    if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-    setTimeout(() => {
-        msg.delete()
-    }, 5000)
-    );
-    if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
+    if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+    if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
     let si = interaction.options.getUser('user');
     let user = si;
     if(!si) {
-        return interaction.followUp({
+        return interaction.reply({
             embeds: [new MessageEmbed().setDescription("\❌ Hey, no has mencionado a la persona!").setColor("RED")]
         })
     }
@@ -40,7 +36,7 @@ module.exports = {
         .setDescription("Hola "+ user.username +"\n\nTienes 5 minutos para responder el ticket!\nDe lo contrario el ticket se cerrará\n\nAtte: Administracion de "+config.TICKET["SERVER-NAME"]+".")
         .setColor("YELLOW")
     user.send({embeds: [embed]})
-    interaction.followUp({
+    interaction.reply({
         embeds: [new MessageEmbed().setDescription("\✅ He avisado a "+ user.username +" correctamente!").setColor("GREEN")]
     })
     if(config.TICKET["LOGS-SYSTEM"] == true) {

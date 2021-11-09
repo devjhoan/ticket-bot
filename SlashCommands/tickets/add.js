@@ -23,18 +23,14 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.ADD === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-            setTimeout(() => {
-                msg.delete()
-            }, 5000)
-        );
-        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
+        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
         let user = interaction.options.getUser('user');
         let añadido = user.id;
         const embed2 = new MessageEmbed()
           .setDescription("```"+ mensajes['NO-TICKET-ADD'] +"```")
           .setColor("RED")
-        if(!user) return interaction.followUp({embeds: [embed2]})
+        if(!user) return interaction.reply({embeds: [embed2]})
         interaction.channel.permissionOverwrites.edit(añadido, {
             ATTACH_FILES: true,
             READ_MESSAGE_HISTORY: true,
@@ -46,7 +42,7 @@ module.exports = {
         .setDescription(`> Staff:\n <@!${interaction.member.user.id}>\n> Miembro Añadido:\n<@!${(await client.users.fetch(añadido)).id}>`)
         .setColor("DARK_GREEN")
         .setTimestamp()
-        interaction.followUp({
+        interaction.reply({
             embeds: [embed]
         })
         if(config.TICKET["LOGS-SYSTEM"] == true) {

@@ -31,21 +31,18 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.UNBLACKLIST === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-        setTimeout(() => {
-            msg.delete()
-        }, 5000))
+        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE']) || !interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
         let usuario = interaction.options.getUser('user');
         let razon = interaction.options.getString('reason') || 'No especificado';
         if(!usuario) {
-            return interaction.followUp({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona a la que le deseas quitar el blacklist!\nUso: `unblacklist <mention/id>`").setColor("RED")]})
+            return interaction.reply({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona a la que le deseas quitar el blacklist!\nUso: `unblacklist <mention/id>`").setColor("RED")], ephemeral: true})
         }
         if(!blacklist.tiene(usuario.id)) {
-            return interaction.followUp({embeds: [new MessageEmbed().setDescription("El usuario no esta blacklisteado!").setColor("RED")]}) 
+            return interaction.reply({embeds: [new MessageEmbed().setDescription("El usuario no esta blacklisteado!").setColor("RED")], ephemeral: true}) 
         }
         if(blacklist.tiene(usuario.id)) {
             blacklist.eliminar(usuario.id)
-            interaction.followUp(`${usuario.tag} ha sido unblacklisteado!`)
+            interaction.reply(`${usuario.tag} ha sido unblacklisteado!`)
         }
         if(config.TICKET["LOGS-SYSTEM"] == true) {
           client.channels.cache.get(config.TICKET['LOG-CHANNEL']).send({

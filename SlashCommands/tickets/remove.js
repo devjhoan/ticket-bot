@@ -23,18 +23,14 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.REMOVE === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-        setTimeout(() => {
-            msg.delete()
-        }, 5000)
-        );
-        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
+        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
         let si = interaction.options.getUser('user');
         let removido = si.id;
         const embed2 = new MessageEmbed()
           .setDescription("```"+ mensajes['NO-TICKET-REMOVE'] +"```")
           .setColor("RED")
-        if(!si) return interaction.followUp({embeds: [embed2]})
+        if(!si) return interaction.reply({embeds: [embed2]})
         interaction.channel.permissionOverwrites.edit(removido, {
           VIEW_CHANNEL: false
         })
@@ -43,7 +39,7 @@ module.exports = {
         .setDescription(`> Staff:\n <@!${interaction.user.id}>\n> ${mensajes['TICKET-REMOVED']}:\n<@!${(await client.users.fetch(removido)).id}>`)
         .setColor("DARK_RED")
         .setTimestamp()
-        interaction.followUp({
+        interaction.reply({
             embeds: [embed]
         })
         if(config.TICKET["LOGS-SYSTEM"] == true) {
