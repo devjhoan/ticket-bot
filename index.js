@@ -5,8 +5,6 @@ const client = new Client({
 });
 module.exports = client;
 
-// Blacklist System!
-
 // Global Variables
 client.commands = new Collection();
 client.slashCommands = new Collection();
