@@ -33,7 +33,7 @@ module.exports = {
         // save in the config file the channel id in a array called LOG-CHANNEL
         config.TICKET['LOG-CHANNEL'] = channelID;
         // save the config file
-        require('fs').writeFile('./config/config.json', JSON.stringify(config), (err) => {
+        require('fs').writeFile('./config/config.json', JSON.stringify(config, null, 4), (err) => {
             if (err) console.log(err);
         });
         // send a message to the channel with the channel name and the channel id in a embed message with a color green 
