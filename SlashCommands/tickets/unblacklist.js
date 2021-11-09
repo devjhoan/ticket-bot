@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 const enable = require('../../config/booleans.json')
 const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
