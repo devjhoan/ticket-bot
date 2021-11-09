@@ -31,7 +31,11 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.BLACKLIST === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: mensajes['NO-PERMS']})
+        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
+        setTimeout(() => {
+            msg.delete()
+        }, 5000)
+        );
         let usuario = interaction.options.getUser('user');
         if(!usuario) {
             return interaction.followUp({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona que deseas blacklistear!\nUso: `blacklist <mention/id> <reason>`").setColor("RED")]})

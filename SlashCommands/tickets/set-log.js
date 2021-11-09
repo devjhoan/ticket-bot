@@ -22,6 +22,11 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
+        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
+        setTimeout(() => {
+            msg.delete()
+        }, 5000)
+        );
         let channel = interaction.options.getChannel('channel');
         // set the channel id
         let channelID = channel.id;

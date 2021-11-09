@@ -14,7 +14,11 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.MULTI === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']})
+    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
+    setTimeout(() => {
+        msg.delete()
+    }, 5000)
+);
     const canal = message.mentions.channels.first() || message.channel;
     const row = new MessageActionRow().addComponents(
         new MessageButton()

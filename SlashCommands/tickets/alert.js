@@ -23,7 +23,11 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
     if(enable.COMMANDS.ALERT === false) return;
-    if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: mensajes['NO-PERMS']})
+    if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
+    setTimeout(() => {
+        msg.delete()
+    }, 5000)
+    );
     if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
     let si = interaction.options.getUser('user');
     let user = si;

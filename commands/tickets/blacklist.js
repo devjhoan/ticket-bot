@@ -16,7 +16,11 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.BLACKLIST === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']})
+    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
+    setTimeout(() => {
+        msg.delete()
+    }, 5000)
+);
     let usuario = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
     if(!usuario) {
         return message.channel.send({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona que deseas blacklistear!\nUso: `blacklist <mention/id> <reason>`").setColor("RED")]})

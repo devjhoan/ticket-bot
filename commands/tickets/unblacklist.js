@@ -16,7 +16,11 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.UNBLACKLIST === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']})
+    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
+    setTimeout(() => {
+        msg.delete()
+    }, 5000)
+);
     let usuario = message.mentions.users.first() || message.client.users.cache.get(args[0]);
     if(!usuario) {
         return message.channel.send({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona a la que le deseas quitar el blacklist!\nUso: `unblacklist <mention/id>`").setColor("RED")]})

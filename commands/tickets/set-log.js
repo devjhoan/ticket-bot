@@ -15,7 +15,11 @@ module.exports = {
   run: async (client, message, args) => {
     // if the user is not an admin, return a message
     if (!message.member.permissions.has("ADMINISTRATOR")) {
-        return message.channel.send("You do not have permission to use this command!");
+        return message.channel.send("You do not have permission to use this command!").then((msg) =>
+        setTimeout(() => {
+            msg.delete()
+        }, 5000)
+    );
     }
     // set the channel id / mention the channel / name of the channel
     let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]);

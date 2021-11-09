@@ -15,8 +15,11 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-    if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: mensajes['NO-PERMS'], ephemeral: true})
-    if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
+        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
+        setTimeout(() => {
+            msg.delete()
+        }, 5000)
+        );    if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.followUp({content: mensajes['NO-TICKET']})
     const idmiembro = interaction.channel.topic;
     const embed = new MessageEmbed()
         .setDescription("```Support team ticket controls```")

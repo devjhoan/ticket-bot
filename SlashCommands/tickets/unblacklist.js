@@ -31,7 +31,10 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.UNBLACKLIST === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: mensajes['NO-PERMS']})
+        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
+        setTimeout(() => {
+            msg.delete()
+        }, 5000))
         let usuario = interaction.options.getUser('user');
         let razon = interaction.options.getString('reason') || 'No especificado';
         if(!usuario) {

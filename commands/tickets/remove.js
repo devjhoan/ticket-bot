@@ -14,7 +14,11 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.REMOVE === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']})
+    if(!message.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
+    setTimeout(() => {
+        msg.delete()
+    }, 5000)
+);
     if(message.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return message.channel.send({content: mensajes['NO-TICKET']})
     let si = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
     let removido = si.id;
