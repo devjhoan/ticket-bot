@@ -24,11 +24,7 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.followUp({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-        setTimeout(() => {
-            msg.delete()
-        }, 5000)
-        );
+        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
         let channel = interaction.options.getChannel('channel');
         // set the channel id
         let channelID = channel.id;
@@ -39,20 +35,13 @@ module.exports = {
             if (err) console.log(err);
         });
         // send a message to the channel with the channel name and the channel id in a embed message with a color green 
-        interaction.followUp({
+        interaction.reply({
             embeds : [
                 new MessageEmbed()
                     .setColor("GREEN")
                     .setTitle("Log Channel Set")
                     .setDescription(`The log channel has been set to ${channel} with the id ${channelID}`)
             ]
-        }).then(msg => {
-            // react to the message whit a check emoji
-            msg.react("✅");
-            // delete the message after 5 seconds
-            setTimeout(() => {
-                msg.delete();
-            }, 5000);
-        });
+        })
     },
 };
