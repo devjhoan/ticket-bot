@@ -24,7 +24,7 @@ module.exports = {
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.RENAME === false) return;
         if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
-        if(message.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
+        if(interaction.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
         let newName = interaction.options.getString('name');
         let channel = interaction.channel;
         if(!newName) {
@@ -44,7 +44,7 @@ module.exports = {
                 .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Rename Ticket", "https://emoji.gg/assets/emoji/9557-pencil.png")
                 .setColor("DARK_VIVID_PINK")
                 .setDescription(`
-                **User**: <@!${message.member.user.id}>
+                **User**: <@!${interaction.member.user.id}>
                 **Action**: Rename a ticket!
                 **Ticket Old Name**: ${channel.name}
                 **Ticket New Name**: ticket-${newName}
