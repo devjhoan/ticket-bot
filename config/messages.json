@@ -14,5 +14,6 @@
     },
     "SURE-CLOSE-TICKET" : "¿Estas seguro de cerrar el ticket?",
     "HAVE-A-TICKET-OPEN" : "Ya tienes un ticket abierto, no puedes crear otro",
-    "MESSAGE-TICKET-OPEN" : "Para editar esto ve a events/tickets/ticketPanel.js"
+    "MESSAGE-TICKET-OPEN" : "Para editar esto ve a events/tickets/ticketPanel.js",
+    "CLOSE-A-TICKET" : "<user.mention> Ha cerrado el ticket!"
 }

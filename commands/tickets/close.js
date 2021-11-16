@@ -41,7 +41,13 @@ module.exports = {
             .setEmoji("⛔")
             .setCustomId("Ticket-Delete")
     )
+    const embed2 = new MessageEmbed()
+        .setDescription(`${mensajes['CLOSE-A-TICKET']}`.replace('<user.tag>', message.author.tag).replace('<user.mention>', message.author).replace('<user.id>', message.author.id).replace('<user.username>', message.author.username).replace('<user.discriminator>', message.author.discriminator))
+        .setColor("ORANGE")
     message.channel.permissionOverwrites.edit(idmiembro, { VIEW_CHANNEL: false });
+    message.channel.send({
+        embeds: [embed2]
+    })
     message.channel.send({
         embeds: [embed],
         components: [row]
