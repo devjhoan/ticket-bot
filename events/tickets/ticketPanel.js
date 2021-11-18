@@ -52,7 +52,7 @@ client.on("interactionCreate", async (interaction) => {
                 )
                 const welcome = new MessageEmbed()
                     .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
-                    .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.username + "#" + interaction.member.user.discriminator +"")
+                    .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.tag +"")
                     .setColor("AQUA")
                     .setFooter(config["TICKET-PANEL"].FOOTER, client.user.displayAvatarURL())
                 if(config.TICKET["MENTION-STAFF"] == true) {
@@ -132,7 +132,7 @@ client.on("interactionCreate", async (interaction) => {
                 )
                 const welcome = new MessageEmbed()
                 .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
-                .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL-2"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.username + "#" + interaction.member.user.discriminator +"")
+                .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL-2"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.tag +"")
                 .setColor("AQUA")
                 .setFooter(config["TICKET-PANEL-2"].FOOTER, client.user.displayAvatarURL())
                 if(config.TICKET["MENTION-STAFF"] == true) {
@@ -212,7 +212,7 @@ client.on("interactionCreate", async (interaction) => {
                 )
                 const welcome = new MessageEmbed()
                 .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
-                .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL-3"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.username + "#" + interaction.member.user.discriminator +"")
+                .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL-3"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.tag +"")
                 .setColor("AQUA")
                 .setFooter(config["TICKET-PANEL-3"].FOOTER, client.user.displayAvatarURL())
                 if(config.TICKET["MENTION-STAFF"] == true) {
@@ -292,7 +292,7 @@ client.on("interactionCreate", async (interaction) => {
                 )
                 const welcome = new MessageEmbed()
                 .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
-                .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL-4"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.username + "#" + interaction.member.user.discriminator +"")
+                .setDescription("Hola "+ interaction.member.user.username +"! Nuestro equipo de soporte responderá lo antes posible.\n Mientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Type:** "+ config["TICKET-PANEL-4"].NAME +"\n**Ticket Owner:** "+ interaction.member.user.tag +"")
                 .setColor("AQUA")
                 .setFooter(config["TICKET-PANEL-4"].FOOTER, client.user.displayAvatarURL())
                 if(config.TICKET["MENTION-STAFF"] == true) {
