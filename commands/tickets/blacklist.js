@@ -42,8 +42,11 @@ module.exports = {
             .setColor("AQUA")
           ]
         })
+      if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+      let logcanal = guildData.channelLog;
+      if(!logcanal) return;
         if(config.TICKET["LOGS-SYSTEM"] == true) {
-          client.channels.cache.get(config.TICKET['LOG-CHANNEL']).send({
+          client.channels.cache.get(logcanal).send({
             embeds: [new MessageEmbed()
               .setTitle("User Blacklisted")
               .setColor("AQUA")
