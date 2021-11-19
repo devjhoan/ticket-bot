@@ -51,14 +51,14 @@ module.exports = {
       });
     }
     // if the user have a role higher than the message author, return
-    // if (user.roles.highest.position >= message.member.roles.highest.position) {
-    //     return message.channel.send(`${message.author} You cannot ban this user.`).then(msg => {
-    //       setTimeout(() => {
-    //         msg.delete();
-    //         message.delete();
-    //       }, 5000);
-    //     });
-    // }
+    if (user.roles.highest.position >= message.member.roles.highest.position) {
+        return message.channel.send(`${message.author} You cannot ban this user.`).then(msg => {
+          setTimeout(() => {
+            msg.delete();
+            message.delete();
+          }, 5000);
+        });
+    }
     // if the user is the owner of the guild, return
     if (user.id === message.guild.ownerID) {
       return message.channel.send(`${message.author} You cannot ban the server owner.`).then(msg => {
