@@ -5,11 +5,8 @@
     "PREFIX": "$",
     "TICKET": {
         "SERVER-NAME": "Crowl Network",
-        "TRANSCRIPT-CHANNEL": "880605805592870912",
-        "LOG-CHANNEL": "900955083217453176",
         "STAFF-ROLE": "879596023062888488",
         "ADMIN-ROLE": "879596009511088219",
-        "HEAD-STAFF": "879596009511088219",
         "LOGS-SYSTEM": true,
         "USER-SEND-TRANSCRIPT": true,
         "MENTION-STAFF": false
