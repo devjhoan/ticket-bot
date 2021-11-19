@@ -28,7 +28,8 @@ module.exports = {
         {
             name: 'ticket-category',
             description: 'Category of the ticket',
-            type: 'STRING',
+            type: 'CHANNEL',
+            channelTypes: ["GUILD_CATEGORY"],
             required: false
         },
         {
@@ -53,7 +54,7 @@ module.exports = {
         let customID = interaction.options.getString("custom-id");
         let ticketName = interaction.options.getString("ticket-name");
         let ticketDescription = interaction.options.getString("ticket-description");
-        let ticketCategory = interaction.options.getString("ticket-category");
+        let ticketCategory = interaction.options.getChannel("ticket-category");
         let ticketEmoji = interaction.options.getString("ticket-emoji");
 
         const guildData = await ticketSchema.findOne({ guildID: interaction.guild.id });
@@ -85,7 +86,7 @@ module.exports = {
                 ticketData.ticketDescription = ticketDescription;
             }
             if(ticketCategory) {
-                ticketData.ticketCategory = ticketCategory;
+                ticketData.ticketCategory = ticketCategory.id;
             }
             if(ticketEmoji) {
                 ticketData.ticketEmoji = ticketEmoji;
@@ -93,8 +94,8 @@ module.exports = {
             await ticketSchema.updateOne({ guildID: interaction.guild.id }, { $set: { tickets: guildData.tickets } });
             let embed = new MessageEmbed()
                 .setColor('#0099ff')
-                .setTitle(`Ticket System`)
-                .setDescription(`Panel edited`)
+                .setTitle(`Ticket System | Panel Edited`)
+                .setDescription(`**ID:** ${ticketData.customID}\n**Name:** ${ticketData.ticketName}\n**Description:** ${ticketData.ticketDescription}\n**Category:** ${ticketData.ticketCategory}\n**Emoji:** ${ticketData.ticketEmoji}`)
                 .setFooter(`${interaction.guild.name}`, `${interaction.guild.iconURL({ dynamic: true })}`);
             return interaction.reply({embeds: [embed], ephemeral: true},)
         }
