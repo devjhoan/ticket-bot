@@ -131,7 +131,7 @@ module.exports = {
                         tickets: [],
                         channelLog: '',
                         channelTranscript: ''
-                    }).catch(err => console.log(err));
+                    })
                     return interaction.reply({content: mensajes["ROLE-SPECIFIED"].replace('<role>', addRole.name),ephemeral: false});
                 }
                 if (removeRole) {
@@ -174,7 +174,7 @@ module.exports = {
                         tickets: [],
                         channelLog: '',
                         channelTranscript: ''
-                    }).catch(err => console.log(err));
+                    })
                     return interaction.reply({content: mensajes["ROLE-SPECIFIED"].replace('<role>', addRole.name),ephemeral: false});
                 }
                 if (removeRole) {

@@ -37,12 +37,12 @@ module.exports = {
             } else {
                 guildData.channelLog = channel.id;
             }
-            await guildData.save().catch(err => console.log(err));
+            await guildData.save()
         } else {
             await ticketSchema.create({
                 guildID: interaction.guild.id,
                 channelLog: channel.id
-            }).catch(err => console.log(err));
+            })
         }
 
         interaction.reply({

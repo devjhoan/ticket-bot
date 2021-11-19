@@ -26,7 +26,7 @@ module.exports = {
 
         if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
         
-        const guildData = await ticketSchema.findOne({guildID: interaction.guild.id}).catch(err => console.log(err));
+        const guildData = await ticketSchema.findOne({guildID: interaction.guild.id})
         if(!guildData) {
             return interaction.reply({content: `${mensajes["NO-SERVER-FIND"]}`, ephemeral: true})
         }

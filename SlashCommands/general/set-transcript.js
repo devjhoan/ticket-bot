@@ -38,12 +38,12 @@ module.exports = {
             } else {
                 guildData.channelTranscript = channel.id;
             }
-            await guildData.save().catch(err => console.log(err));
+            await guildData.save()
         } else {
             await ticketSchema.create({
                 guildID: interaction.guild.id,
                 channelTranscript: channel.id
-            }).catch(err => console.log(err));
+            })
         }
 
         // send a message to the channel with the channel name and the channel id in a embed message with a color green 

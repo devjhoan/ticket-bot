@@ -57,7 +57,7 @@ module.exports = {
         
         const guildData = await TicketSchema.findOne({
             guildID: interaction.guild.id
-        }).catch(err => console.log(err));
+        })
         
         const newTicket = {
             customID: customID,
@@ -74,12 +74,12 @@ module.exports = {
             } else {
                 guildData.tickets = [...guildData.tickets, newTicket];
             }
-            await guildData.save().catch(err => console.log(err));
+            await guildData.save()
         } else {
             await TicketSchema.create({
                 guildID: interaction.guild.id,
                 tickets: [newTicket]
-            }).catch(err => console.log(err));
+            })
         }
         let embed = new MessageEmbed()
             .setTitle(`Ticket Panel configurated ✅`)

@@ -18,7 +18,7 @@ module.exports = {
 
         const ticketList = await ticketSchema.findOne({
             guildID: interaction.guild.id
-        }).catch(err => console.log(err));
+        })
         if(!ticketList) {
             let embed = new MessageEmbed()
                 .setColor('#0099ff')
