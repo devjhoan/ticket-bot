@@ -8,18 +8,20 @@ const ticketSchema = require("../../models/ticketSchema");
 client.on("interactionCreate", async (interaction) => {
     let idmiembro = interaction.channel.topic;
     if(interaction.isButton()) {
-        if(interaction.customId === "Ticket-Transcript") {
+        if(interaction.customId == "Ticket-Transcript") {
             // channel transcript using mongodb
             const guildData = await ticketSchema.findOne({
                 guildID: interaction.guild.id
             })
+            if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            var staffRole = guildData.roles.staffRole;
             if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
             let transcriptcanal = guildData.channelTranscript;
             let logcanal = guildData.channelLog;
             if(config.TICKET["USER-SEND-TRANSCRIPT"] == false) {
                 interaction.deferUpdate();
-                if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
+                if(!interaction.member.roles.cache.get(staffRole)) {
                     return;
                 }
                 // Transcript Attachment
@@ -56,7 +58,7 @@ client.on("interactionCreate", async (interaction) => {
             }
             if(config.TICKET['USER-SEND-TRANSCRIPT'] == true) {
                 interaction.deferUpdate();
-                if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
+                if(!interaction.member.roles.cache.get(staffRole)) {
                     return;
                 }
                 const trow = new MessageActionRow().addComponents(
@@ -85,21 +87,22 @@ client.on("interactionCreate", async (interaction) => {
         const guildData = await ticketSchema.findOne({
             guildID: interaction.guild.id
         })
-        if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-        if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
         let transcriptcanal = guildData.channelTranscript;
         let logcanal = guildData.channelLog;
+        var staffRole = guildData.roles.staffRole;
         // channel transcript using mongodb
         if(interaction.customId == "TR-CN") {
-            interaction.deferUpdate();
-            if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
-                return;
+            interaction.deferUpdate();  
+            if(!interaction.member.roles.cache.get(staffRole)) {
+                return console.log("No tiene el rol");
             }
             interaction.message.delete();
         }
         if(interaction.customId == "TR-YES") {
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
             interaction.deferUpdate();
-            if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
+            if(!interaction.member.roles.cache.get(staffRole)) {
                 return;
             }
             interaction.message.delete()
@@ -124,11 +127,18 @@ client.on("interactionCreate", async (interaction) => {
                 .setColor("GREEN")
             interaction.channel.send({embeds: [trsend]})
             // Transcript send to user!
+            
             let usu = interaction.client.users.cache.get(interaction.channel.topic);
-            usu.send({
-                embeds: [mensaje],
-                 files: [file]
-            })
+            try {
+                await usu.send({
+                    embeds: [mensaje],
+                     files: [file]
+                })
+            } catch (error) {
+                return interaction.message.channel.send({
+                    embeds: [new MessageEmbed().setDescription(`\n❌ Error: ${error}`).setColor("RED")]
+                })
+            }
             // Transcipt log Channel!
             if(!guildData.channelLog) return;
             if(config.TICKET["LOGS-SYSTEM"] == true) {
@@ -141,8 +151,10 @@ client.on("interactionCreate", async (interaction) => {
             }
         }
         if(interaction.customId == "TR-NO") {
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
             interaction.deferUpdate();
-            if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
+            if(!interaction.member.roles.cache.get(staffRole)) {
                 return;
             }
             interaction.message.delete()
