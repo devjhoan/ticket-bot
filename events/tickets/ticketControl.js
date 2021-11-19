@@ -2,7 +2,7 @@ const { MessageButton, MessageEmbed, Discord, MessageAttachment, MessageActionRo
 const client = require("../../index");
 const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
-
+const ticketSchema = require("../../models/ticketSchema");
 
 client.on("interactionCreate", async (interaction, message) => {
     const idmiembro = interaction.channel.topic;
@@ -21,6 +21,12 @@ client.on("interactionCreate", async (interaction, message) => {
             .setColor("GREEN")
         interaction.channel.send({embeds: [openmed]})
         interaction.channel.permissionOverwrites.edit(idmiembro, { VIEW_CHANNEL: true });
+        const guildData = await ticketSchema.findOne({
+            guildID: interaction.guild.id,
+        })
+        if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+        let logcanal = guildData.channelLog;
+        if(!logcanal) return;
         if(config.TICKET["LOGS-SYSTEM"] == true) {
             const log = new MessageEmbed()
             .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Open", "https://emoji.gg/assets/emoji/4776_Pinged_Unlocked.png")
@@ -31,7 +37,7 @@ client.on("interactionCreate", async (interaction, message) => {
             **Ticket Name**: ${interaction.channel.name}
             **Ticket Owner**: <@!${interaction.channel.topic}>`)
             .setFooter("Ticket System by: Jhoan#6969")
-        interaction.client.channels.cache.get(config.TICKET["LOG-CHANNEL"]).send({embeds: [log]});   
+        interaction.client.channels.cache.get(logcanal).send({embeds: [log]});   
         }
         if(config.TICKET["LOGS-SYSTEM"] == false) {
             return;
