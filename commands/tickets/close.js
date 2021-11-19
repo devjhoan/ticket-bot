@@ -2,6 +2,7 @@ const { Client, Message, MessageEmbed, MessageActionRow, MessageButton } = requi
 const enable = require('../../config/booleans.json')
 const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
+const ticketSchema = require("../../models/ticketSchema");
 
 module.exports = {
   name: "close",
@@ -15,11 +16,18 @@ module.exports = {
   run: async (client, message, args) => {
     if(enable.COMMANDS.CLOSE === false) return;
     if(!message.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
-    setTimeout(() => {
-        msg.delete()
-    }, 5000)
-);
-    if(message.channel.parentId !== config['TICKET-PANEL'].CATEGORY) return message.channel.send({content: mensajes['NO-TICKET']})
+    setTimeout(() => {msg.delete()}, 5000));
+
+    const guildData = await ticketSchema.findOne({guildID: message.guild.id})
+    if(!guildData) return message.channel.send({content: mensajes['NO-SERVER-FIND']}).then((msg) =>
+    setTimeout(() => {msg.delete() }, 5000));
+    if(!guildData.tickets || guildData.tickets.length === 0) return message.channel.send({content: mensajes['NO-TICKET-FIND']}).then((msg) =>
+    setTimeout(() => {msg.delete()}, 5000));
+    const ticketData = guildData.tickets.map(z  => { return { customID: z.customID, ticketName: z.ticketName, ticketFooter: z.ticketFooter, ticketCategory: z.ticketCategory, ticketEmoji: z.ticketEmoji,}})
+    const categoryID = ticketData.map(x => {return x.ticketCategory})
+    if(!categoryID.includes(message.channel.parentId)) return message.channel.send({content: mensajes['NO-TICKET']}).then((msg) =>
+    setTimeout(() => {msg.delete()}, 5000));
+    
     const idmiembro = message.channel.topic;
     const embed = new MessageEmbed()
         .setDescription("```Support team ticket controls```")
@@ -41,12 +49,12 @@ module.exports = {
             .setEmoji("⛔")
             .setCustomId("Ticket-Delete")
     )
-    const embed2 = new MessageEmbed()
+    const log = new MessageEmbed()
         .setDescription(`${mensajes['CLOSE-A-TICKET']}`.replace('<user.tag>', message.author.tag).replace('<user.mention>', message.author).replace('<user.id>', message.author.id).replace('<user.username>', message.author.username).replace('<user.discriminator>', message.author.discriminator))
         .setColor("ORANGE")
     message.channel.permissionOverwrites.edit(idmiembro, { VIEW_CHANNEL: false });
     message.channel.send({
-        embeds: [embed2]
+        embeds: [log]
     })
     message.channel.send({
         embeds: [embed],
