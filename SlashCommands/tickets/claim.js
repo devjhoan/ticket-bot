@@ -24,7 +24,7 @@ module.exports = {
         const ticketData = guildData.tickets.map(z  => { return { customID: z.customID, ticketName: z.ticketName, ticketDescription: z.ticketDescription, ticketCategory: z.ticketCategory, ticketEmoji: z.ticketEmoji,}})
         const categoryID = ticketData.map(x => {return x.ticketCategory})
         if(!categoryID.includes(interaction.channel.parentId)) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
-
+        var staffRole = guildData.roles.staffRole;
         const idmiembro = interaction.channel.topic;
         interaction.channel.permissionOverwrites.set([
           {
@@ -40,7 +40,7 @@ module.exports = {
               allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"],
           },
           {
-              id: config.TICKET['STAFF-ROLE'],
+              id: staffRole,
               deny: ['VIEW_CHANNEL'],
           }
       ]);
@@ -49,8 +49,6 @@ module.exports = {
         .setColor("GREEN")
       interaction.reply({
         embeds: [embed]
-      }).then((msg) => {
-        msg.react("👋")
       })
       let logcanal = guildData.channelLog;
       if(!logcanal) return;

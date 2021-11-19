@@ -2,12 +2,18 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const client = require('../../index')
 const config = require('../../config/config.json');
 const mensajes = require('../../config/messages.json');
+const ticketSchema = require("../../models/ticketSchema");
 
 client.on("interactionCreate", async (interaction) => {
     if(interaction.isButton()) {
         if(interaction.customId == "Ticket-Claimed") {
             interaction.deferUpdate();
-            if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
+            const guildData = await ticketSchema.findOne({
+                guildID: interaction.guild.id
+            })
+            if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+            var staffRole = guildData.roles.staffRole;
+            if(!interaction.member.roles.cache.get(staffRole)) {
                 return;
             }
             let idmiembro = interaction.channel.topic;
@@ -25,7 +31,7 @@ client.on("interactionCreate", async (interaction) => {
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"],
                 },
                 {
-                    id: config.TICKET['STAFF-ROLE'],
+                    id: staffRole,
                     deny: ['VIEW_CHANNEL'],
                 }
             ])
@@ -48,9 +54,10 @@ client.on("interactionCreate", async (interaction) => {
             const embed = new MessageEmbed()
                 .setDescription(""+ mensajes['TICKET-CLAIMED'] +" "+ interaction.member.user.tag +"")
                 .setColor("GREEN");
-            const ticketSchema = require("../../models/ticketSchema");
-            const guildData = await ticketSchema.findOne({
-                guildID: interaction.guild.id
+            interaction.message.channel.send({embeds: [embed]}).then((msg) => {
+                setTimeout(() => {
+                    msg.delete();
+                }, 3000);
             })
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
             let logcanal = guildData.channelLog;
@@ -68,18 +75,9 @@ client.on("interactionCreate", async (interaction) => {
                         .setFooter("Ticket System by: Jhoan#6969")]}
                     
                 )
-                interaction.message.channel.send({embeds: [embed]}).then((msg) => {
-                    setTimeout(() => {
-                        msg.delete();
-                    }, 3000);
-                })
             }
             if(config.TICKET["LOGS-SYSTEM"] == false) {
-                interaction.message.channel.send({embeds: [embed]}).then((msg) => {
-                    setTimeout(() => {
-                        msg.delete();
-                    }, 3000);
-                })
+                return;
             }
 
         }

@@ -45,9 +45,11 @@ client.on("interactionCreate", async (interaction) => {
         const guildData = await ticketSchema.findOne({
             guildID: interaction.guild.id,
         })
+        var staffRole = guildData.roles.staffRole;
         const guildTicket = guildData.tickets
         const Data = guildTicket.find(x => x.customID === wea);
 
+        
         let ide = interaction.member.user.id;
         let reason = await blacklist.obtener(`${ide}.reason`);
         if(blacklist.tiene(ide)) {
@@ -68,7 +70,7 @@ client.on("interactionCreate", async (interaction) => {
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]
                 },
                 {
-                    id: config.TICKET["STAFF-ROLE"],
+                    id: staffRole,
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]
                 }
             ]
@@ -92,7 +94,7 @@ client.on("interactionCreate", async (interaction) => {
                 .setFooter(`${config.TICKET["SERVER-NAME"]} - Support System`, client.user.displayAvatarURL())
                 if(config.TICKET["MENTION-STAFF"] == true) {
                 channel.send({
-                    content: `<@!${interaction.member.user.id}> | <@&${config.TICKET["STAFF-ROLE"]}>`,
+                    content: `<@!${interaction.member.user.id}> | <@&${staffRole}>`,
                     embeds: [welcome],
                     components: [row]
                 })
@@ -133,6 +135,7 @@ client.on("interactionCreate", async (interaction) => {
         const guildTicket = guildData.tickets
         const Data = guildTicket.find(x => x.customID === wea);
 
+        var staffRole = guildData.roles.staffRole;
         let ide = interaction.member.user.id;
         let reason = await blacklist.obtener(`${ide}.reason`);
         if(blacklist.tiene(ide)) {
@@ -158,7 +161,7 @@ client.on("interactionCreate", async (interaction) => {
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]
                 },
                 {
-                    id: config.TICKET["STAFF-ROLE"],
+                    id: staffRole,
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]
                 }
             ]
@@ -182,7 +185,7 @@ client.on("interactionCreate", async (interaction) => {
                 .setFooter(`${config.TICKET["SERVER-NAME"]} - Support System`, client.user.displayAvatarURL())
                 if(config.TICKET["MENTION-STAFF"] == true) {
                 channel.send({
-                    content: `<@!${interaction.member.user.id}> | <@&${config.TICKET["STAFF-ROLE"]}>`,
+                    content: `<@!${interaction.member.user.id}> | <@&${staffRole}>`,
                     embeds: [welcome],
                     components: [row]
                 })
