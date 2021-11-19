@@ -46,22 +46,31 @@ client.on("interactionCreate", async (interaction, message) => {
             .setDescription(mensajes["TICKET-STAFF-CONTROLS"]["TICKET-DELETED"])
             .setColor("RED")
         interaction.channel.send({embeds: [delembed]})
-        setTimeout(() => {
-            interaction.channel.delete()
-            if(config.TICKET["LOGS-SYSTEM"] == false) {
-                return;
-            }
-            const log = new MessageEmbed()
-                .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Closed", "https://emoji.gg/assets/emoji/5381_Pinged_Lock.png")
-                .setColor("RED")
-                .setDescription(`
+        setTimeout(async function () {
+                interaction.channel.delete();
+                const ticketSchema = require("../../models/ticketSchema");
+                const guildData = await ticketSchema.findOne({
+                    guildID: interaction.guild.id
+                });
+                if (!guildData)
+                    return interaction.reply({ content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true });
+                let logcanal = guildData.channelLog;
+                if (!logcanal)
+                    return;
+                if (config.TICKET["LOGS-SYSTEM"] == false) {
+                    return;
+                }
+                const log = new MessageEmbed()
+                    .setAuthor("" + config.TICKET["SERVER-NAME"] + " | Ticket Closed", "https://emoji.gg/assets/emoji/5381_Pinged_Lock.png")
+                    .setColor("RED")
+                    .setDescription(`
                 **User**: <@!${interaction.member.user.id}>
                 **Action**: Close a ticket
                 **Ticket Name**: ${interaction.channel.name}
                 **Ticket Owner**: <@!${interaction.channel.topic}>`)
-                .setFooter("Ticket System by: Jhoan#6969")
-            interaction.client.channels.cache.get(config.TICKET["LOG-CHANNEL"]).send({embeds: [log]});
-        }, 5000);
+                    .setFooter("Ticket System by: Jhoan#6969");
+                interaction.client.channels.cache.get(logcanal).send({ embeds: [log] });
+            }, 5000);
     }
 }
 });
