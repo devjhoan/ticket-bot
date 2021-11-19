@@ -20,8 +20,15 @@ client.on("interactionCreate", async (interaction) => {
                     interaction.channel.delete()
                 }, 5000);
             })
+            const ticketSchema = require("../../models/ticketSchema");
+            const guildData = await ticketSchema.findOne({
+                guildID: interaction.guild.id
+            })
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            let logcanal = guildData.channelLog;
+            if(!logcanal) return;
             if(config.TICKET["LOGS-SYSTEM"] == true) {
-                interaction.client.channels.cache.get(config.TICKET["LOG-CHANNEL"]).send({embeds: [new MessageEmbed()
+                interaction.client.channels.cache.get(logcanal).send({embeds: [new MessageEmbed()
                     .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Deleted", "https://emoji.gg/assets/emoji/6982_NotixDeny.png")
                     .setColor("RED")
                     .setDescription(`**User**: <@!${interaction.member.user.id}>
