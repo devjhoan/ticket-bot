@@ -22,6 +22,7 @@ module.exports = {
         })
         if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
         if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: `${mensajes['NO-TICKET-FIND']}`, ephemeral: true})
+        if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
         const options = guildData.tickets.map(x => {
             return {
                 label: x.ticketName,
