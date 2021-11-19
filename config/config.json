@@ -8,8 +8,9 @@
         "STAFF-ROLE": "879596023062888488",
         "ADMIN-ROLE": "879596009511088219",
         "LOGS-SYSTEM": true,
-        "USER-SEND-TRANSCRIPT": true,
-        "MENTION-STAFF": false
+        "NUMBER-TICKET" : true,
+        "MENTION-STAFF": false,
+        "USER-SEND-TRANSCRIPT": true
     },
     "VERSION": "2.0"
 }
