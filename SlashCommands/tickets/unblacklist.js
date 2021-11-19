@@ -44,8 +44,15 @@ module.exports = {
             blacklist.eliminar(usuario.id)
             interaction.reply(`${usuario.tag} ha sido unblacklisteado!`)
         }
+        const ticketSchema = require("../../models/ticketSchema");
+        const guildData = await ticketSchema.findOne({
+            guildID: interaction.guild.id
+        })
+        if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+        let logcanal = guildData.channelLog;
+        if(!logcanal) return;
         if(config.TICKET["LOGS-SYSTEM"] == true) {
-          client.channels.cache.get(config.TICKET['LOG-CHANNEL']).send({
+          client.channels.cache.get(logcanal).send({
             embeds: [new MessageEmbed()
               .setTitle("User Un-Blacklisted")
               .setColor("AQUA")
