@@ -47,33 +47,40 @@ client.on("interactionCreate", async (interaction) => {
             })
             const embed = new MessageEmbed()
                 .setDescription(""+ mensajes['TICKET-CLAIMED'] +" "+ interaction.member.user.tag +"")
-                .setColor("GREEN")
-                if(config.TICKET["LOGS-SYSTEM"] == true) {
-                    interaction.client.channels.cache.get(config.TICKET["LOG-CHANNEL"]).send(
-                        {embeds: [new MessageEmbed()
-                            .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Claimed", "https://emoji.gg/assets/emoji/6290-discord-invite-user.png")
-                            .setColor("YELLOW")
-                            .setDescription(`
-                            **User**: <@!${interaction.member.user.id}>
-                            **Action**: Claimed a ticket
-                            **Ticket Name**: ${interaction.channel.name}
-                            **Ticket Owner**: <@!${interaction.channel.topic}>`)
-                            .setFooter("Ticket System by: Jhoan#6969")]}
-                        
-                    )
-                    interaction.message.channel.send({embeds: [embed]}).then((msg) => {
-                        setTimeout(() => {
-                            msg.delete();
-                        }, 3000);
-                    })
-                }
-                if(config.TICKET["LOGS-SYSTEM"] == false) {
-                    interaction.message.channel.send({embeds: [embed]}).then((msg) => {
-                        setTimeout(() => {
-                            msg.delete();
-                        }, 3000);
-                    })
-                }
+                .setColor("GREEN");
+            const ticketSchema = require("../../models/ticketSchema");
+            const guildData = await ticketSchema.findOne({
+                guildID: interaction.guild.id
+            })
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            let logcanal = guildData.channelLog;
+            if(!logcanal) return;
+            if(config.TICKET["LOGS-SYSTEM"] == true) {
+                interaction.client.channels.cache.get(logcanal).send(
+                    {embeds: [new MessageEmbed()
+                        .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Claimed", "https://emoji.gg/assets/emoji/6290-discord-invite-user.png")
+                        .setColor("YELLOW")
+                        .setDescription(`
+                        **User**: <@!${interaction.member.user.id}>
+                        **Action**: Claimed a ticket
+                        **Ticket Name**: ${interaction.channel.name}
+                        **Ticket Owner**: <@!${interaction.channel.topic}>`)
+                        .setFooter("Ticket System by: Jhoan#6969")]}
+                    
+                )
+                interaction.message.channel.send({embeds: [embed]}).then((msg) => {
+                    setTimeout(() => {
+                        msg.delete();
+                    }, 3000);
+                })
+            }
+            if(config.TICKET["LOGS-SYSTEM"] == false) {
+                interaction.message.channel.send({embeds: [embed]}).then((msg) => {
+                    setTimeout(() => {
+                        msg.delete();
+                    }, 3000);
+                })
+            }
 
         }
     }
