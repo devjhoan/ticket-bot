@@ -1,46 +1,18 @@
 {
     "TOKEN": "ODc1MDcxOTQwMDkwNTQwMTI1.YRQMQA.HLZEs5-kBeLsDT9krIplQbr8PcQ",
-    "GUILD-ID" : "858822262740484127",
-    "MONGOOSECONNECTIONSTRING": "",
+    "GUILD-ID": "858822262740484127",
+    "MONGOOSECONNECTIONSTRING": "mongodb+srv://crowl-user:gnxH6DkcVWHTXJdD@crowl-bots.dunpn.mongodb.net/TicketTest",
     "PREFIX": "$",
-    "TICKET" : {
-        "SERVER-NAME" : "Crowl Network",
-        "TRANSCRIPT-CHANNEL" : "880605805592870912",
-        "LOG-CHANNEL" : "900955083217453176",
-        "STAFF-ROLE" : "879596023062888488",
-        "ADMIN-ROLE" : "879596009511088219",
-        "HEAD-STAFF" : "879596009511088219",
-        "LOGS-SYSTEM" : true,
-        "USER-SEND-TRANSCRIPT" : true,
-        "MENTION-STAFF" : false
+    "TICKET": {
+        "SERVER-NAME": "Crowl Network",
+        "TRANSCRIPT-CHANNEL": "880605805592870912",
+        "LOG-CHANNEL": "900955083217453176",
+        "STAFF-ROLE": "879596023062888488",
+        "ADMIN-ROLE": "879596009511088219",
+        "HEAD-STAFF": "879596009511088219",
+        "LOGS-SYSTEM": true,
+        "USER-SEND-TRANSCRIPT": true,
+        "MENTION-STAFF": false
     },
-    "TICKET-PANEL" : {
-        "NAME" : "General Support",
-        "FOOTER" : "Crowl Network - Support System",
-        "CATEGORY" : "885599679075725372",
-        "BUTTON-EMOJI" : "875531614686416917",
-        "CUSTOM-ID" : "general-support"
-    },
-    "TICKET-PANEL-2" : {
-        "NAME" : "Buycraft Support",
-        "FOOTER" : "Crowl Network - Support System",
-        "BUTTON-EMOJI" : "875531713307111464",
-        "CATEGORY" : "885599679075725372",
-        "CUSTOM-ID" : "buycraft-support"
-    },
-    "TICKET-PANEL-3" : {
-        "NAME" : "Ban Appeal Support",
-        "FOOTER" : "Crowl Network - Support System",
-        "BUTTON-EMOJI" : "875531633514655805",
-        "CATEGORY" : "885599679075725372",
-        "CUSTOM-ID" : "ban-appeal"
-    },
-    "TICKET-PANEL-4" : {
-        "NAME" : "Claim Rank Support",
-        "FOOTER" : "Crowl Network - Support System",
-        "BUTTON-EMOJI" : "902460007285653516",
-        "CATEGORY" : "885599679075725372",
-        "CUSTOM-ID" : "claim-rank"
-    },
-    "VERSION" : "1.1"
+    "VERSION": "2.0"
 }
