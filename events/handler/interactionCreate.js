@@ -81,9 +81,6 @@ client.on("interactionCreate", async (interaction) => {
                 .setDescription(mensajes["EMBED-PANEL"].replace('<meber.username>', interaction.member.user.username).replace('<ticket.type>', Data.ticketName).replace('<member.mention>', interaction.member.user))
                 .setColor("AQUA")
                 .setFooter(`${config.TICKET["SERVER-NAME"]} - Support System`, client.user.displayAvatarURL())
-                if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-                let logcanal = guildData.channelLog;
-                if(!logcanal) return;
                 if(config.TICKET["MENTION-STAFF"] == true) {
                 channel.send({
                     content: `<@!${interaction.member.user.id}> | <@&${config.TICKET["STAFF-ROLE"]}>`,
@@ -98,6 +95,10 @@ client.on("interactionCreate", async (interaction) => {
                     components: [row]
                 })
             }
+            interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            let logcanal = guildData.channelLog;
+            if(!logcanal) return;
             if(config.TICKET["LOGS-SYSTEM"] == true) {
                 const log = new MessageEmbed()
                 .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Created", "https://emoji.gg/assets/emoji/1270-chat.png")
@@ -108,11 +109,10 @@ client.on("interactionCreate", async (interaction) => {
                 **Panel**: ${Data.ticketName}
                 **Ticket Name**: ${channel.name}`)
                 .setFooter("Ticket System by: Jhoan#6969")
-            interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
             interaction.client.channels.cache.get(logcanal).send({embeds: [log]});
             }
             if(config.TICKET["LOGS-SYSTEM"] == false) {
-            interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
+                return;
             }
         })
     }
