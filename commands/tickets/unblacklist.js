@@ -17,10 +17,7 @@ module.exports = {
   run: async (client, message, args) => {
     if(enable.COMMANDS.UNBLACKLIST === false) return;
     if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
-    setTimeout(() => {
-        msg.delete()
-    }, 5000)
-);
+    setTimeout(() => {msg.delete()}, 5000));
     let usuario = message.mentions.users.first() || message.client.users.cache.get(args[0]);
     if(!usuario) {
         return message.channel.send({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona a la que le deseas quitar el blacklist!\nUso: `unblacklist <mention/id>`").setColor("RED")]})
@@ -32,8 +29,11 @@ module.exports = {
         blacklist.eliminar(usuario.id)
         message.channel.send(`${usuario.tag} ha sido unblacklisteado!`)
     }
+    if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+    let logcanal = guildData.channelLog;
+    if(!logcanal) return;
     if(config.TICKET["LOGS-SYSTEM"] == true) {
-      client.channels.cache.get(config.TICKET['LOG-CHANNEL']).send({
+      client.channels.cache.get(logcanal).send({
         embeds: [new MessageEmbed()
           .setTitle("User Un-Blacklisted")
           .setColor("AQUA")
