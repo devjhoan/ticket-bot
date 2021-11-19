@@ -14,7 +14,10 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        
+        if(!interaction.member.permissions.has("ADMINISTRATOR")) {
+            return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        }
 
         const ticketList = await ticketSchema.findOne({
             guildID: interaction.guild.id

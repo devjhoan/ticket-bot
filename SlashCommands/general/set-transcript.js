@@ -1,6 +1,4 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
-const config = require('../../config/config.json')
-const enable = require('../../config/booleans.json')
 const mensajes = require('../../config/messages.json');
 const ticketSchema = require("../../models/ticketSchema");
 
@@ -25,7 +23,9 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        if(!interaction.member.permissions.has("ADMINISTRATOR")) {
+            return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        }
         let channel = interaction.options.getChannel('channel');
 
         const guildData = await ticketSchema.findOne({

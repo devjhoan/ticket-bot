@@ -1,5 +1,4 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
-const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
 const ticketSchema = require("../../models/ticketSchema");
 
@@ -46,6 +45,11 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
+
+        if(!interaction.member.permissions.has("ADMINISTRATOR")) {
+            return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        }
+
         let customID = interaction.options.getString("custom-id");
         let ticketName = interaction.options.getString("ticket-name");
         let ticketDescription = interaction.options.getString("ticket-description");

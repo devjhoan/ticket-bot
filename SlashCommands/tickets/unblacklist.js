@@ -4,7 +4,7 @@ const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
 const db = require('megadb');
 let blacklist = new db.crearDB('blacklist');
-
+const ticketSchema = require("../../models/ticketSchema");
 module.exports = {
     name: "unblacklist",
     description: "unblacklist to a member",
@@ -31,7 +31,13 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
         if(enable.COMMANDS.UNBLACKLIST === false) return;
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE']) || !interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        
+        const guildData = await ticketSchema.findOne({guildID: interaction.guild.id})
+        if(!guildData) return interaction.reply({content: mensajes['NO-SERVER-FIND'], ephemeral: true})
+        if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+        if(!interaction.member.roles.cache.get(guildData.roles.staffRole) && !interaction.member.roles.cache.get(guildData.roles.adminRole)) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: mensajes['NO-TICKET-FIND'], ephemeral: true})
+
         let usuario = interaction.options.getUser('user');
         let razon = interaction.options.getString('reason') || 'No especificado';
         if(!usuario) {
@@ -44,10 +50,7 @@ module.exports = {
             blacklist.eliminar(usuario.id)
             interaction.reply(`${usuario.tag} ha sido unblacklisteado!`)
         }
-        const ticketSchema = require("../../models/ticketSchema");
-        const guildData = await ticketSchema.findOne({
-            guildID: interaction.guild.id
-        })
+        
         if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
         let logcanal = guildData.channelLog;
         if(!logcanal) return;

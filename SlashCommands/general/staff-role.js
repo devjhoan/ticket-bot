@@ -81,19 +81,15 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
+        
+        if(!interaction.member.permissions.has("ADMINISTRATOR")) {
+            return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        }
+
         let getSubcommandGroup = interaction.options.getSubcommandGroup("admin-role");
         let addRole = interaction.options.getRole('add-role');
         let removeRole = interaction.options.getRole('remove-role');
         const guildData = await TicketSchema.findOne({ guildID: interaction.guild.id});
-        // model is 
-        // guildID: String,
-        // roles: {
-        //     staffRole: String,
-        //     adminRole: String,
-        // },
-        // tickets: Array,
-        // channelLog: String,
-        // channelTranscript: String,
 
         if(getSubcommandGroup === "staff-role") {
             if (guildData) {

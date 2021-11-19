@@ -23,25 +23,29 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
     if(enable.COMMANDS.ALERT === false) return;
-    if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
-    
+        
     const guildData = await ticketSchema.findOne({guildID: interaction.guild.id})
     if(!guildData) return interaction.reply({content: mensajes['NO-SERVER-FIND'], ephemeral: true})
+    if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+    if(!interaction.member.roles.cache.get(guildData.roles.staffRole) && !interaction.member.roles.cache.get(guildData.roles.adminRole)) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
     if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: mensajes['NO-TICKET-FIND'], ephemeral: true})
-    const ticketData = guildData.tickets.map(z  => { return { customID: z.customID, ticketName: z.ticketName, ticketFooter: z.ticketFooter, ticketCategory: z.ticketCategory, ticketEmoji: z.ticketEmoji,}})
+    const ticketData = guildData.tickets.map(z  => { return { customID: z.customID, ticketName: z.ticketName, ticketDescription: z.ticketDescription, ticketCategory: z.ticketCategory, ticketEmoji: z.ticketEmoji,}})
     const categoryID = ticketData.map(x => {return x.ticketCategory})
     if(!categoryID.includes(interaction.channel.parentId)) return interaction.reply({content: mensajes['NO-TICKET'], ephemeral: true})
     
     let user = interaction.options.getUser('user');
-    if(!user) {
-        return interaction.reply({
-            embeds: [new MessageEmbed().setDescription("\❌ Hey, no has mencionado a la persona!").setColor("RED")]
-        })
-    }
     const embed = new MessageEmbed()
         .setDescription("Hola "+ user.username +"\n\nTienes 5 minutos para responder el ticket!\nDe lo contrario el ticket se cerrará\n\nAtte: Administracion de "+config.TICKET["SERVER-NAME"]+".")
         .setColor("YELLOW")
-    user.send({embeds: [embed]})
+        // send the embed to the user, and if it fails, send a message to the channel
+    try {
+        await user.send({embeds: [embed]})	
+    } catch (error) {
+        return interaction.reply({
+            embeds: [new MessageEmbed().setDescription(`\n❌ Error: ${error}`).setColor("RED")]
+        })
+    }
+
     interaction.reply({
         embeds: [new MessageEmbed().setDescription("\✅ He avisado a "+ user.username +" correctamente!").setColor("GREEN")]
     })

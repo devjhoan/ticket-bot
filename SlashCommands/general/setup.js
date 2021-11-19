@@ -1,5 +1,4 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
-const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
 const TicketSchema = require('../../models/ticketSchema');
 
@@ -53,7 +52,9 @@ module.exports = {
         let Emoji = interaction.options.getString("button-emoji");
         let customID = interaction.options.getString("custom-id");
 
-        if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        if(!interaction.member.permissions.has("ADMINISTRATOR")) {
+            return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
+        }
         
         const guildData = await TicketSchema.findOne({
             guildID: interaction.guild.id
