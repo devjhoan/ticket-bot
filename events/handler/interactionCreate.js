@@ -3,8 +3,7 @@ const config = require('../../config/config.json');
 const client = require("../../index");
 const mensajes = require('../../config/messages.json');
 const db = require('megadb');
-let blacklist = new db.crearDB('blacklist');
-let ticketNumber = new db.crearDB('ticketNumber')
+const ticketSchema = require("../../models/ticketSchema");
 
 client.on("interactionCreate", async (interaction) => {
     // Slash Command Handling
@@ -40,7 +39,6 @@ client.on("interactionCreate", async (interaction) => {
         if(interaction.customId !== "SUPPORT-SYSTEM") return;
         let wea = interaction.values[0];
         // code main 
-        const ticketSchema = require("../../models/ticketSchema");
         const guildData = await ticketSchema.findOne({
             guildID: interaction.guild.id,
         })
@@ -83,7 +81,10 @@ client.on("interactionCreate", async (interaction) => {
                 .setDescription(mensajes["EMBED-PANEL"].replace('<meber.username>', interaction.member.user.username).replace('<ticket.type>', Data.ticketName).replace('<member.mention>', interaction.member.user))
                 .setColor("AQUA")
                 .setFooter(`${config.TICKET["SERVER-NAME"]} - Support System`, client.user.displayAvatarURL())
-            if(config.TICKET["MENTION-STAFF"] == true) {
+                if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+                let logcanal = guildData.channelLog;
+                if(!logcanal) return;
+                if(config.TICKET["MENTION-STAFF"] == true) {
                 channel.send({
                     content: `<@!${interaction.member.user.id}> | <@&${config.TICKET["STAFF-ROLE"]}>`,
                     embeds: [welcome],
@@ -108,7 +109,7 @@ client.on("interactionCreate", async (interaction) => {
                 **Ticket Name**: ${channel.name}`)
                 .setFooter("Ticket System by: Jhoan#6969")
             interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
-            interaction.client.channels.cache.get(config.TICKET["LOG-CHANNEL"]).send({embeds: [log]});
+            interaction.client.channels.cache.get(logcanal).send({embeds: [log]});
             }
             if(config.TICKET["LOGS-SYSTEM"] == false) {
             interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
