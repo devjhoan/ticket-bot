@@ -1,7 +1,8 @@
-const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 const config = require('../../config/config.json')
 const enable = require('../../config/booleans.json')
 const mensajes = require('../../config/messages.json');
+const ticketSchema = require("../../models/ticketSchema");
 
 module.exports = {
     name: "channel-transcript",
@@ -26,21 +27,32 @@ module.exports = {
     run: async (client, interaction, args) => {
         if(!interaction.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
         let channel = interaction.options.getChannel('channel');
-        // set the channel id
-        let channelID = channel.id;
-        // save in the config file the channel id in a array called LOG-CHANNEL
-        config.TICKET['TRANSCRIPT-CHANNEL'] = channelID;
-        // save the config file
-        require('fs').writeFile('./config/config.json', JSON.stringify(config, null, 4), (err) => {
-            if (err) console.log(err);
-        });
+
+        const guildData = await ticketSchema.findOne({
+            guildID: interaction.guild.id
+        })
+        if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+        if(guildData) {
+            if(guildData.channelTranscript == channel.id) {
+                return interaction.reply({content: `${mensajes['CHANNEL-EXISTS']}`, ephemeral: true})
+            } else {
+                guildData.channelTranscript = channel.id;
+            }
+            await guildData.save().catch(err => console.log(err));
+        } else {
+            await ticketSchema.create({
+                guildID: interaction.guild.id,
+                channelTranscript: channel.id
+            }).catch(err => console.log(err));
+        }
+
         // send a message to the channel with the channel name and the channel id in a embed message with a color green 
         interaction.reply({
             embeds : [
                 new MessageEmbed()
                     .setColor("GREEN")
                     .setTitle("Transcript Channel Set")
-                    .setDescription(`The Transcript channel has been set to ${channel} with the id ${channelID}`)
+                    .setDescription(`The Transcript channel has been set to ${channel} with the id ${channel.id}`)
             ]
         })
     },
