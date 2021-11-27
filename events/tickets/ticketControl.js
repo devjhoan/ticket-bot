@@ -1,4 +1,4 @@
-const { MessageButton, MessageEmbed, Discord, MessageAttachment, MessageActionRow} = require("discord.js");
+const { MessageEmbed} = require("discord.js");
 const client = require("../../index");
 const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
@@ -7,10 +7,14 @@ const ticketSchema = require("../../models/ticketSchema");
 client.on("interactionCreate", async (interaction, message) => {
     const idmiembro = interaction.channel.topic;
     if(interaction.isButton()){
-    if(!interaction.member.roles.cache.get(config.TICKET["STAFF-ROLE"])) return;
+        const guildData = await ticketSchema.findOne({
+            guildID: interaction.guild.id
+        });
+        var staffRole = guildData.roles.staffRole;
+    if(!interaction.member.roles.cache.get(staffRole)) return;
     if(interaction.customId === "Ticket-Open") {
         interaction.deferUpdate();
-        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
+        if(!interaction.member.roles.cache.get(staffRole)) {
             return;
         }
             setTimeout(() => {
@@ -45,9 +49,9 @@ client.on("interactionCreate", async (interaction, message) => {
     }
     if(interaction.customId === "Ticket-Delete") {
         interaction.deferUpdate();
-        if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
-            return;
-        }
+        if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+        if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+        if(!interaction.member.roles.cache.get(staffRole)) return;
         const delembed = new MessageEmbed()
             .setDescription(mensajes["TICKET-STAFF-CONTROLS"]["TICKET-DELETED"])
             .setColor("RED")
@@ -55,9 +59,6 @@ client.on("interactionCreate", async (interaction, message) => {
         setTimeout(async function () {
                 interaction.channel.delete();
                 const ticketSchema = require("../../models/ticketSchema");
-                const guildData = await ticketSchema.findOne({
-                    guildID: interaction.guild.id
-                });
                 if (!guildData)
                     return interaction.reply({ content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true });
                 let logcanal = guildData.channelLog;

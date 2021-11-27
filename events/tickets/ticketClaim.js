@@ -54,11 +54,7 @@ client.on("interactionCreate", async (interaction) => {
             const embed = new MessageEmbed()
                 .setDescription(""+ mensajes['TICKET-CLAIMED'] +" "+ interaction.member.user.tag +"")
                 .setColor("GREEN");
-            interaction.message.channel.send({embeds: [embed]}).then((msg) => {
-                setTimeout(() => {
-                    msg.delete();
-                }, 3000);
-            })
+            interaction.message.channel.send({embeds: [embed]})
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
             let logcanal = guildData.channelLog;
             if(!logcanal) return;
