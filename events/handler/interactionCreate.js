@@ -2,8 +2,6 @@ const { MessageButton, MessageEmbed, Discord, MessageActionRow } = require("disc
 const config = require('../../config/config.json');
 const client = require("../../index");
 const mensajes = require('../../config/messages.json');
-const db = require('megadb');
-const blacklist = new db.crearDB('blacklist');
 const ticketSchema = require("../../models/ticketSchema");
 
 client.on("interactionCreate", async (interaction) => {
@@ -50,9 +48,13 @@ client.on("interactionCreate", async (interaction) => {
 
         
         let ide = interaction.member.user.id;
-        let reason = await blacklist.obtener(`${ide}.reason`);
-        if(blacklist.tiene(ide)) {
-            return interaction.reply({embeds: [new MessageEmbed().setDescription(`Hey!, te encuentras blacklistedo por la razón:\n**${reason}**`).setColor("RED")], ephemeral: true})
+
+        const blacklistData = guildData.usersBlacklisted;
+        const findBlacklisted = blacklistData.find(user => user.userID === ide);
+        if(findBlacklisted) {
+            let reason = findBlacklisted.reason;
+            let a = await mensajes['BLACKLISTED-MSG'].replace('<reason>', reason);
+            return interaction.reply({embeds: [new MessageEmbed().setDescription(a).setColor("RED")], ephemeral: true});
         }
 
         interaction.guild.channels.create(`ticket-${interaction.member.user.username}`, {
@@ -137,9 +139,12 @@ client.on("interactionCreate", async (interaction) => {
 
         var staffRole = guildData.roles.staffRole;
         let ide = interaction.member.user.id;
-        let reason = await blacklist.obtener(`${ide}.reason`);
-        if(blacklist.tiene(ide)) {
-            return interaction.reply({embeds: [new MessageEmbed().setDescription(`Hey!, te encuentras blacklistedo por la razón:\n**${reason}**`).setColor("RED")], ephemeral: true})
+        const blacklistData = guildData.usersBlacklisted;
+        const findBlacklisted = blacklistData.find(user => user.userID === ide);
+        if(findBlacklisted) {
+            let reason = findBlacklisted.reason;
+            let a = await mensajes['BLACKLISTED-MSG'].replace('<reason>', reason);
+            return interaction.reply({embeds: [new MessageEmbed().setDescription(a).setColor("RED")], ephemeral: true});
         }
 
         if(ticketNumber = 0) {

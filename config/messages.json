@@ -33,5 +33,10 @@
     "ROLE-EXISTS" : "The <role> role is already specified",
     "ROLE-SPECIFIED" : "The <role> role has been successfully configured",
     "ROLE-REMOVED" : "The <role> role has been successfully removed from the database",
-    "ROLE-NO-FOUND" : "The <role> role is not found in the database"
+    "ROLE-NO-FOUND" : "The <role> role is not found in the database",
+    "MENTION-BLACKLIST" : "You must mention the person you want on the blacklist!\nUsague: `blacklist <mention/id> <reason>`",
+    "USER-BLACKLISTED" : "Blacklisted user successfully!",
+    "NOT-BLACKLISTED" : "This user is not blacklisted",
+    "USER-ALR-BLACKLISTED" : "This user is already on the blacklist!",
+    "BLACKLISTED-MSG" : "Hey !, you find yourself blacklisted for the reason:\n **<reason>**"
 }

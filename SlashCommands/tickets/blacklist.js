@@ -31,50 +31,40 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-        if(enable.COMMANDS.BLACKLIST === false) return;
+      if(enable.COMMANDS.BLACKLIST === false) return;
 
-        const guildData = await ticketSchema.findOne({guildID: interaction.guild.id})
-        if(!guildData) return interaction.reply({content: mensajes['NO-SERVER-FIND'], ephemeral: true})
-        if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
-        if(!interaction.member.roles.cache.get(guildData.roles.staffRole) && !interaction.member.roles.cache.get(guildData.roles.adminRole)) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
-        if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: mensajes['NO-TICKET-FIND'], ephemeral: true})
-
-        let usuario = interaction.options.getUser('user');
-        if(!usuario) {
-            return interaction.reply({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona que deseas blacklistear!\nUso: `blacklist <mention/id> <reason>`").setColor("RED")], ephemeral: true})
+      const guildData = await ticketSchema.findOne({guildID: interaction.guild.id})
+      if(!interaction.member.roles.cache.get(guildData.roles.adminRole)) return interaction.reply({content: mensajes['NO-PERMS'], ephemeral: true})
+  
+      let usuario = interaction.options.getUser('user');
+      if(!usuario) {
+          return interaction.reply({embeds: [new MessageEmbed().setDescription(""+mensajes['MENTION-BLACKLIST']+"").setColor("RED")]})
+      }
+      let razon = interaction.options.getString('reason') || "No specify";
+  
+      let schema = {
+          userID: usuario.id,
+          reason: razon,
+          moderator: interaction.member.user.id,
+          date: new Date(),
+      }
+  
+      if(guildData) {
+        let blacklistData = guildData.usersBlacklisted.find((x) => x.userID === usuario.id)
+        if(blacklistData) {
+          return interaction.reply({embeds: [new MessageEmbed().setDescription(mensajes['USER-ALR-BLACKLISTED']).setColor("RED")]})
+        } else {
+          guildData.usersBlacklisted =  [...guildData.usersBlacklisted, schema]
+          guildData.save()
+          return interaction.reply({embeds: [new MessageEmbed().setDescription(mensajes['USER-BLACKLISTED']).setColor("GREEN")]})
         }
-        let razon = interaction.options.getString('reason') || "No especificado";
-        if(!razon) {
-          return interaction.reply({embeds: [new MessageEmbed().setDescription("Debes ingresar la razon del blacklist\nUso: `blacklist <mention/id> <reason>`").setColor("RED")], ephemeral: true})
-        }
-        if(blacklist.tiene(usuario.id)) {
-            return interaction.reply({embeds: [new MessageEmbed().setDescription("El usuario ya esta blacklisteado!").setColor("RED")], ephemeral: true}) 
-        }
-        if(!blacklist.tiene(usuario.id)) {
-            blacklist.establecer(usuario.id, {reason: razon})
-            interaction.reply({
-              embeds: [new MessageEmbed()
-                .setTitle(""+config.TICKET["SERVER-NAME"]+" | Ticket System")
-                .setDescription("**Staff Member:**: <@!"+ interaction.member.id+ ">\n\n ```diff\n+ "+ usuario.tag +"\n- "+razon+"```")
-                .setTimestamp()
-                .setColor("AQUA")
-              ]
-            })
-            let logcanal = guildData.channelLog;
-            if(!logcanal) return;
-            if(config.TICKET["LOGS-SYSTEM"] == true) {
-              client.channels.cache.get(logcanal).send({
-                embeds: [new MessageEmbed()
-                  .setTitle("User Blacklisted")
-                  .setColor("AQUA")
-                  .setTimestamp()
-                  .setDescription("**Staff:** <@!"+ interaction.member.user.id+"> `["+ interaction.member.user.tag +"]`\n\n ```diff\n+ "+ usuario.tag +"\n- "+razon+"```")
-                ]
-              })
-            }
-            if(config.TICKET["LOGS-SYSTEM"] == false) {
-            return;
-            }
-        }
+      } else {
+        let newGuildData = new ticketSchema({
+          guildID: interaction.guild.id,
+          usersBlacklisted: [schema]
+        })
+        newGuildData.save()
+        return interaction.reply({embeds: [new MessageEmbed().setDescription(mensajes['USER-BLACKLISTED']).setColor("GREEN")]})
+      }
     },
 };
