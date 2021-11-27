@@ -1,9 +1,7 @@
 const { Client, Message, MessageEmbed } = require('discord.js');
-const config = require('../../config/config.json')
 const enable = require('../../config/booleans.json')
 const mensajes = require('../../config/messages.json');
-const db = require('megadb');
-let blacklist = new db.crearDB('blacklist');
+const ticketSchema = require('../../models/ticketSchema')
 
 module.exports = {
   name: "unblacklist",
@@ -16,34 +14,31 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.UNBLACKLIST === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
+    
+    const guildData = await ticketSchema.findOne({guildID: message.guild.id})
+    if(!message.member.roles.cache.get(guildData.roles.adminRole)) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
     setTimeout(() => {msg.delete()}, 5000));
-    let usuario = message.mentions.users.first() || message.client.users.cache.get(args[0]);
+    if(!guildData) {
+      return message.channel.send({content: `${mensajes["NO-SERVER-FIND"]}`})
+  }
+    let usuario = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
     if(!usuario) {
-        return message.channel.send({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona a la que le deseas quitar el blacklist!\nUso: `unblacklist <mention/id>`").setColor("RED")]})
+        return message.channel.send({embeds: [new MessageEmbed().setDescription("You must mention the person you want unblacklist!\nUsague: `unblacklist <mention/id>`").setColor("RED")]})
     }
-    if(!blacklist.tiene(usuario.id)) {
-        return message.channel.send({embeds: [new MessageEmbed().setDescription("El usuario no esta blacklisteado!").setColor("RED")]}) 
+
+    const blacklistData = guildData.usersBlacklisted;
+    const findBlacklisted = blacklistData.find(user => user.userID === usuario.id);
+    if(!findBlacklisted) {
+        return message.channel.send({embeds: [new MessageEmbed().setDescription("This user is not blacklisted").setColor("RED")]})
     }
-    if(blacklist.tiene(usuario.id)) {
-        blacklist.eliminar(usuario.id)
-        message.channel.send(`${usuario.tag} ha sido unblacklisteado!`)
-    }
-    if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-    let logcanal = guildData.channelLog;
-    if(!logcanal) return;
-    if(config.TICKET["LOGS-SYSTEM"] == true) {
-      client.channels.cache.get(logcanal).send({
-        embeds: [new MessageEmbed()
-          .setTitle("User Un-Blacklisted")
-          .setColor("AQUA")
-          .setTimestamp()
-          .setDescription("**Staff:** <@!"+ message.author.id+"> `["+ message.author.tag +"]`\n\n ```diff\n+ "+ usuario.tag +"\n- "+razon+"```")
-        ]
-      })
-    }
-    if(config.TICKET["LOGS-SYSTEM"] == false) {
-    return;
-    }
+    let filteredBlacklisted = blacklistData.filter(user => user.userID !== usuario.id);
+    guildData.usersBlacklisted = filteredBlacklisted;
+    await guildData.save();
+    
+    let embed = new MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`Ticket System | User Unblacklisted`)
+            .setDescription(`The user has been successfully unblacklisted*`);
+    return message.channel.send({embeds: [embed]})
   },
 };
