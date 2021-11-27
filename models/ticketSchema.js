@@ -7,6 +7,7 @@ const ticketSchema = new mongoose.Schema ({
         adminRole: String,
     },
     tickets: Array,
+    ticketCounter: Number,
     channelLog: String,
     channelTranscript: String,
 })

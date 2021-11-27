@@ -4,7 +4,6 @@ const client = require("../../index");
 const mensajes = require('../../config/messages.json');
 const db = require('megadb');
 const blacklist = new db.crearDB('blacklist');
-const ticketNumber = new db.crearDB('ticketNumber')
 const ticketSchema = require("../../models/ticketSchema");
 
 client.on("interactionCreate", async (interaction) => {
@@ -133,6 +132,7 @@ client.on("interactionCreate", async (interaction) => {
             guildID: interaction.guild.id,
         })
         const guildTicket = guildData.tickets
+        let ticketNumber = guildData.ticketCounter;
         const Data = guildTicket.find(x => x.customID === wea);
 
         var staffRole = guildData.roles.staffRole;
@@ -142,10 +142,16 @@ client.on("interactionCreate", async (interaction) => {
             return interaction.reply({embeds: [new MessageEmbed().setDescription(`Hey!, te encuentras blacklistedo por la razón:\n**${reason}**`).setColor("RED")], ephemeral: true})
         }
 
-        if(!ticketNumber.tiene('tickets')) { ticketNumber.establecer('tickets', 0001) } else { ticketNumber.sumar('tickets', 1) }
-            let numero = await ticketNumber.obtener('tickets');
+        if(ticketNumber = 0) {
+            await ticketSchema.findOneAndUpdate({guildID: interaction.guild.id}, {$set: {ticketCounter: 1}})
+        } else {
+            await ticketSchema.findOneAndUpdate({guildID: interaction.guild.id}, {$inc: {ticketCounter: 1}})
+            let numero = await ticketSchema.findOne({guildID: interaction.guild.id})
+            ticketNumber = numero.ticketCounter;
+            console.log(ticketNumber)
             const zeroPad = (num, places) => String(num).padStart(places, '0')
-            let numnew = zeroPad(numero, 4);
+            var numnew = zeroPad(ticketNumber, 4);
+        }
 
         interaction.guild.channels.create(`ticket-${numnew}`, {
             type: "text",
