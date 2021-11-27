@@ -1,9 +1,6 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 const enable = require('../../config/booleans.json')
-const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
-const db = require('megadb');
-let blacklist = new db.crearDB('blacklist');
 const ticketSchema = require("../../models/ticketSchema");
 
 module.exports = {
