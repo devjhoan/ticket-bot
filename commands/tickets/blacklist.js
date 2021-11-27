@@ -1,9 +1,7 @@
 const { Client, Message, MessageEmbed } = require('discord.js');
-const config = require('../../config/config.json')
 const enable = require('../../config/booleans.json')
 const mensajes = require('../../config/messages.json');
-const db = require('megadb');
-let blacklist = new db.crearDB('blacklist');
+const ticketSchema = require('../../models/ticketSchema')
 
 module.exports = {
   name: "blacklist",
@@ -16,48 +14,40 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.BLACKLIST === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['ADMIN-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
-    setTimeout(() => {
-        msg.delete()
-    }, 5000)
-);
+
+    const guildData = await ticketSchema.findOne({guildID: message.guild.id})
+    if(!message.member.roles.cache.get(guildData.roles.adminRole)) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
+    setTimeout(() => {msg.delete()}, 5000));
+
     let usuario = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
     if(!usuario) {
-        return message.channel.send({embeds: [new MessageEmbed().setDescription("Debes mencionar la persona que deseas blacklistear!\nUso: `blacklist <mention/id> <reason>`").setColor("RED")]})
+        return message.channel.send({embeds: [new MessageEmbed().setDescription(""+mensajes['MENTION-BLACKLIST']+"").setColor("RED")]})
     }
     let razon = args.slice(1).join(" ") || "No reason!";
-    if(!razon) {
-      return message.channel.send({embeds: [new MessageEmbed().setDescription("Debes ingresar la razon del blacklist\nUso: `blacklist <mention/id> <reason>`").setColor("RED")]})
+
+    let schema = {
+        userID: usuario.id,
+        reason: razon,
+        moderator: message.author.id,
+        date: new Date(),
     }
-    if(blacklist.tiene(usuario.id)) {
-        return message.channel.send({embeds: [new MessageEmbed().setDescription("El usuario ya esta blacklisteado!").setColor("RED")]}) 
-    }
-    if(!blacklist.tiene(usuario.id)) {
-        blacklist.establecer(usuario.id, {reason: razon})
-        message.channel.send({
-          embeds: [new MessageEmbed()
-            .setTitle(""+config.TICKET["SERVER-NAME"]+" | Ticket System")
-            .setDescription("**Staff Member:**: <@!"+ message.author.id+ ">\n\n ```diff\n+ "+ usuario.tag +"\n- "+razon+"```")
-            .setTimestamp()
-            .setColor("AQUA")
-          ]
-        })
-      if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-      let logcanal = guildData.channelLog;
-      if(!logcanal) return;
-        if(config.TICKET["LOGS-SYSTEM"] == true) {
-          client.channels.cache.get(logcanal).send({
-            embeds: [new MessageEmbed()
-              .setTitle("User Blacklisted")
-              .setColor("AQUA")
-              .setTimestamp()
-              .setDescription("**Staff:** <@!"+ message.author.id+"> `["+ message.author.tag +"]`\n\n ```diff\n+ "+ usuario.tag +"\n- "+razon+"```")
-            ]
-          })
-        }
-        if(config.TICKET["LOGS-SYSTEM"] == false) {
-        return;
-        }
+
+    if(guildData) {
+      let blacklistData = guildData.usersBlacklisted.find((x) => x.userID === usuario.id)
+      if(blacklistData) {
+        return message.channel.send({embeds: [new MessageEmbed().setDescription(mensajes['USER-ALR-BLACKLISTED']).setColor("RED")]})
+      } else {
+        guildData.usersBlacklisted =  [...guildData.usersBlacklisted, schema]
+        guildData.save()
+        return message.channel.send({embeds: [new MessageEmbed().setDescription(mensajes['USER-BLACKLISTED']).setColor("GREEN")]})
+      }
+    } else {
+      let newGuildData = new ticketSchema({
+        guildID: message.guild.id,
+        usersBlacklisted: [schema]
+      })
+      newGuildData.save()
+      return message.channel.send({embeds: [new MessageEmbed().setDescription(mensajes['USER-BLACKLISTED']).setColor("GREEN")]})
     }
   },
 };
