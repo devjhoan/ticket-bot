@@ -22,7 +22,7 @@
     "TICKET-CREATED" : "A ticket panel has been created, with the id <custom_id>",
     "NO-SERVER-FIND" : "I could not find this server in my db",
     "NO-TICKET-SETUP" : "This server does not have any registered tickets",
-    "NO-TICKET-FIND" : "I did not find this ticket in my db",
+    "NO-TICKET-FIND" : "This server does not have a ticket panel, to create one use (/panel setup)",
     "TICKET-REMOVED-PANEL" : "The ticket <ticket> has been removed from the db",
     "MESSAGE-EMBED" : "Para crear un ticket use el botón correspondiente a cada categoría\nDe lo contrario será sancionado!",
     "CHANNEL-EXISTS" : "This channel is already registered",

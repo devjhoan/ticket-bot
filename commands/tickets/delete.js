@@ -15,10 +15,10 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.DELETE === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return message.channel.send({content: mensajes['NO-PERMS']}).then((msg) =>
-    setTimeout(() => {msg.delete()}, 5000));
-
     const guildData = await ticketSchema.findOne({guildID: message.guild.id})
+    if(!guildData.roles || !guildData.roles.staffRole) return message.channel.send({content: mensajes["NO-ROLES-CONFIG"]}).then((msg) => setTimeout(() => {message.delete(), msg.delete()}, 5000));
+    if(!message.member.roles.cache.get(guildData.roles.staffRole) && !message.member.roles.cache.get(guildData.roles.adminRole)) return message.reply({content: `${mensajes['NO-PERMS']}`}).then((msg) => setTimeout(() => {message.delete(), msg.delete()}, 5000));
+
     if(!guildData) return message.channel.send({content: mensajes['NO-SERVER-FIND']}).then((msg) =>
     setTimeout(() => {msg.delete() }, 5000));
     if(!guildData.tickets || guildData.tickets.length === 0) return message.channel.send({content: mensajes['NO-TICKET-FIND']}).then((msg) =>
@@ -30,12 +30,12 @@ module.exports = {
 
     const row = new MessageActionRow().addComponents(
         new MessageButton()
-            .setLabel("Delete Ticket")
-            .setStyle("DANGER")
+            .setEmoji('👍')
+            .setStyle("SUCCESS")
             .setCustomId("DELETE-TICKET-N"),
         new MessageButton()
-            .setLabel("Cancel")
-            .setStyle("SECONDARY")
+            .setEmoji("👎")
+            .setStyle("DANGER")
             .setCustomId("CANCEL-TICKET-N"),
     )
     const embed = new MessageEmbed()

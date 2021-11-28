@@ -2,16 +2,18 @@ const { MessageButton, MessageEmbed, Discord, MessageActionRow } = require("disc
 const config = require('../../config/config.json');
 const client = require("../../index");
 const mensajes = require('../../config/messages.json');
+const ticketSchema = require('../../models/ticketSchema');
 
 client.on("interactionCreate", async (interaction) => {
     if(interaction.isButton()) {
+        const guildData = await ticketSchema.findOne({guildID: interaction.guild.id})
         if(interaction.customId === "CANCEL-TICKET-N") {
             interaction.message.delete()
         }
         if(interaction.customId === "DELETE-TICKET-N") {
-            if(!interaction.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) {
-                return;
-            }
+        if(!guildData) return interaction.reply({content: mensajes['NO-SERVER-FIND'], ephemeral: true})
+        if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+        if(!interaction.member.roles.cache.get(guildData.roles.staffRole) && !interaction.member.roles.cache.get(guildData.roles.adminRole)) return interaction.reply({content: `${mensajes['NO-PERMS']}`, ephemeral: true})
             const embed1 = new MessageEmbed()
                 .setDescription(mensajes["TICKET-STAFF-CONTROLS"]["TICKET-DELETED"])
                 .setColor("DARK_RED")
@@ -19,10 +21,6 @@ client.on("interactionCreate", async (interaction) => {
                 setTimeout(() => {
                     interaction.channel.delete()
                 }, 5000);
-            })
-            const ticketSchema = require("../../models/ticketSchema");
-            const guildData = await ticketSchema.findOne({
-                guildID: interaction.guild.id
             })
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
             let logcanal = guildData.channelLog;

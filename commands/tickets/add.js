@@ -15,27 +15,26 @@ module.exports = {
    */
   run: async (client, message, args) => {
     if(enable.COMMANDS.ADD === false) return;
-    if(!message.member.roles.cache.get(config.TICKET['STAFF-ROLE'])) return message.channel.send({content: `${mensajes['NO-PERMS']}`}).then((msg) =>
-    setTimeout(() => {msg.delete()}, 5000));
-    
     const guildData = await ticketSchema.findOne({guildID: message.guild.id})
-    if(!guildData) return message.channel.send({content: mensajes['NO-SERVER-FIND']}).then((msg) =>
-    setTimeout(() => {msg.delete() }, 5000));
+
+    if(!guildData.roles || !guildData.roles.staffRole) return message.channel.send({content: mensajes["NO-ROLES-CONFIG"]}).then((msg) => setTimeout(() => {message.delete(), msg.delete()}, 5000));
+    if(!message.member.roles.cache.get(guildData.roles.staffRole) && !message.member.roles.cache.get(guildData.roles.adminRole)) return message.reply({content: `${mensajes['NO-PERMS']}`}).then((msg) => setTimeout(() => {message.delete(), msg.delete()}, 5000));
+    
+    if(!guildData) return message.reply({content: mensajes['NO-SERVER-FIND']}).then((msg) =>
+    setTimeout(() => {message.delete(), msg.delete()}, 5000));
     if(!guildData.tickets || guildData.tickets.length === 0) return message.channel.send({content: mensajes['NO-TICKET-FIND']}).then((msg) =>
-    setTimeout(() => {msg.delete()}, 5000));
+    setTimeout(() => {message.delete(), msg.delete()}, 5000));
     const ticketData = guildData.tickets.map(z  => { return { customID: z.customID, ticketName: z.ticketName, ticketFooter: z.ticketFooter, ticketCategory: z.ticketCategory, ticketEmoji: z.ticketEmoji,}})
     const categoryID = ticketData.map(x => {return x.ticketCategory})
     if(!categoryID.includes(message.channel.parentId)) return message.channel.send({content: mensajes['NO-TICKET']}).then((msg) =>
-    setTimeout(() => {msg.delete()}, 5000));
+    setTimeout(() => {message.delete(), msg.delete()}, 5000));
 
     let user = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
-    if(!user) return message.channel.send({content: "Hey, you haven't specified the user you want add"}).then((msg) =>
-    setTimeout(() => {msg.delete() }, 5000));
-    let añadido = user.id;
     const embed2 = new MessageEmbed()
       .setDescription("```"+ mensajes['NO-TICKET-ADD'] +"```")
       .setColor("RED")
-    if(!user) return message.channel.send({embeds: [embed2]})
+    if(!user) return message.channel.send({embeds: [embed2]}).then((msg) => setTimeout(() => {message.delete(), msg.delete()}, 5000));
+    let añadido = user.id;
     message.channel.permissionOverwrites.edit(añadido, {
         ATTACH_FILES: true,
 		    READ_MESSAGE_HISTORY: true,
@@ -50,7 +49,7 @@ module.exports = {
     message.channel.send({
         embeds: [embed]
     })
-    if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+    if(!guildData) return message.reply({content: `${mensajes['NO-SERVER-FIND']}`}).then((msg) => setTimeout(() => {msg.delete()}, 5000));
     let logcanal = guildData.channelLog;
     if(!logcanal) return;
     if(config.TICKET["LOGS-SYSTEM"] == true) {
