@@ -43,7 +43,7 @@ module.exports = {
           allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"],
       },
       {
-          id: config.TICKET['STAFF-ROLE'],
+          id: guildData.roles.staffRole,
           deny: ['VIEW_CHANNEL'],
       }
   ]);
