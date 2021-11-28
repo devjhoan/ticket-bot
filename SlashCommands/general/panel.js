@@ -7,6 +7,20 @@ module.exports = {
     name: "panel",
     description: "Create the panel whit buttons",
     type: 'CHAT_INPUT',
+    options: [
+        {
+            name: 'type',
+            description: 'Type of the panel',
+            type: 'STRING',
+            required: true,
+            choices: [
+                {
+                    name: 'dropdown',
+                    value: 'ticket panel using dropdown menus'
+                }
+            ],
+        },
+    ],
     /**
      *
      * @param {Client} client
@@ -20,27 +34,68 @@ module.exports = {
         const guildData = await ticketSchema.findOne({
             guildID: interaction.guild.id
         })
-        if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-        if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: `${mensajes['NO-TICKET-FIND']}`, ephemeral: true})
-        if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
-        const options = guildData.tickets.map(x => {
-            return {
-                label: x.ticketName,
-                value: x.customID,
-                description: x.ticketDescription || "Support Ticket",
-                emoji: x.ticketEmoji,
+        const type = interaction.options.getString('type');
+        var newTitle = config.TICKET["SERVER-NAME"];
+        var messageDescription = mensajes["MESSAGE-EMBED"];
+        
+        if(type == 'ticket panel using buttons') {
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: `${mensajes['NO-TICKET-FIND']}`, ephemeral: true})
+            if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+            const components = [];
+            lastComponents = new MessageActionRow();
+            const options = guildData.tickets.map(x => {
+                return {
+                    customID:  x.customID,
+                    emoji:  x.ticketEmoji
+                }
+            })
+            for(let i = 0; i < options.length; i++) {
+                if(options[i].emoji != undefined) {
+                    const button = new MessageButton()
+                        .setCustomId(options[i].customID)
+                        .setEmoji(options[i].emoji)
+                        .setStyle("SECONDARY")
+                    lastComponents.addComponents(button)
+                    if(lastComponents.components.length === 3) {
+                        components.push(lastComponents)
+                        lastComponents = new MessageActionRow();
+                    }
+                }
             }
-        })
-        const panelEmbed = new MessageEmbed()
-            .setAuthor(`${config.TICKET["SERVER-NAME"]}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
-            .setDescription(`${mensajes["MESSAGE-EMBED"]}`)
-            .setColor("#2f3136")
-        const row = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
-                .setCustomId("SUPPORT-SYSTEM")
-                .setMaxValues(1)
-                .addOptions(options)
-        )        
-        interaction.reply({embeds: [panelEmbed], components: [row]})
+            if(lastComponents.components.length > 0) {
+                components.push(lastComponents)
+            }
+            const panelEmbed = new MessageEmbed()
+                .setAuthor(`${newTitle}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
+                .setDescription(`${messageDescription}`)
+                .setColor("#2f3136")
+            interaction.reply({content: "Panel sent correctly!", ephemeral: true})
+            interaction.channel.send({embeds: [panelEmbed], components: components})
+        } else {
+            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
+            if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: `${mensajes['NO-TICKET-FIND']}`, ephemeral: true})
+            if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
+            const options = guildData.tickets.map(x => {
+                return {
+                    label: x.ticketName,
+                    value: x.customID,
+                    description: x.ticketDescription || "Support Ticket",
+                    emoji: x.ticketEmoji,
+                }
+            })
+            const panelEmbed = new MessageEmbed()
+                .setAuthor(`${newTitle}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
+                .setDescription(`${messageDescription}`)
+                .setColor("#2f3136")
+            const row = new MessageActionRow().addComponents(
+                new MessageSelectMenu()
+                    .setCustomId("SUPPORT-SYSTEM")
+                    .setMaxValues(1)
+                    .addOptions(options)
+            )        
+            interaction.reply({content: "Panel sent correctly!", ephemeral: true})
+            interaction.channel.send({embeds: [panelEmbed], components: [row]})
+        }
     },
 };
