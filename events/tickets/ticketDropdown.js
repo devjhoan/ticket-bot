@@ -127,7 +127,6 @@ client.on("interactionCreate", async (interaction) => {
             await ticketSchema.findOneAndUpdate({guildID: interaction.guild.id}, {$inc: {ticketCounter: 1}})
             let numero = await ticketSchema.findOne({guildID: interaction.guild.id})
             ticketNumber = numero.ticketCounter;
-            console.log(ticketNumber)
             const zeroPad = (num, places) => String(num).padStart(places, '0')
             var numnew = zeroPad(ticketNumber, 4);
         }
