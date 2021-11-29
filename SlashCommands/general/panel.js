@@ -20,6 +20,13 @@ module.exports = {
                 }
             ],
         },
+        {
+            name: 'channel',
+            description: 'Channel where the panel will be created',
+            type: 'CHANNEL',
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
+        },
     ],
     /**
      *
@@ -35,6 +42,7 @@ module.exports = {
             guildID: interaction.guild.id
         })
         const type = interaction.options.getString('type');
+        const channel = interaction.options.getChannel('channel');
         var newTitle = config.TICKET["SERVER-NAME"];
         var messageDescription = mensajes["MESSAGE-EMBED"];
         
@@ -95,7 +103,7 @@ module.exports = {
                     .addOptions(options)
             )        
             interaction.reply({content: "Panel sent correctly!", ephemeral: true})
-            interaction.channel.send({embeds: [panelEmbed], components: [row]})
+            client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: [row]})
         }
     },
 };
