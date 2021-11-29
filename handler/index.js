@@ -42,7 +42,8 @@ module.exports = async (client) => {
         arrayOfSlashCommands.push(file);
     });
     client.on("ready", async () => {
-        await client.application.commands.set(arrayOfSlashCommands);
+        const guild = client.guilds.cache.get(config["GUILD-ID"]);
+        guild.commands.set(arrayOfSlashCommands);
     });
 
     // mongoose
