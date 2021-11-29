@@ -9,6 +9,9 @@
     "keywords": [],
     "author": "Jhoan#6969",
     "license": "ISC",
+    "engines": {
+        "node": "16.x"
+    },
     "dependencies": {
         "discord-html-transcripts": "^1.0.0",
         "discord.js": "^13.1.0",
