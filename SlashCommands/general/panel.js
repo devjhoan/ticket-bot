@@ -27,6 +27,22 @@ module.exports = {
             channelTypes: ["GUILD_TEXT"],
             required: true,
         },
+        {
+            name: 'description',
+            description: 'Do you want to enable the description in the menu?',
+            type: 'STRING',
+            choices: [
+                {
+                    name: 'yes',
+                    value: 'yes'
+                },
+                {
+                    name: 'no',
+                    value: 'no'
+                }
+            ],
+            required: false,
+        }
     ],
     /**
      *
@@ -43,6 +59,8 @@ module.exports = {
         })
         const type = interaction.options.getString('type');
         const channel = interaction.options.getChannel('channel');
+        const description = interaction.options.getString('description');
+
         var newTitle = config.TICKET["SERVER-NAME"];
         var messageDescription = mensajes["MESSAGE-EMBED"];
         
@@ -84,26 +102,44 @@ module.exports = {
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
             if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: `${mensajes['NO-TICKET-FIND']}`, ephemeral: true})
             if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
-            const options = guildData.tickets.map(x => {
-                return {
-                    label: x.ticketName,
-                    value: x.customID,
-                    description: x.ticketDescription || "Support Ticket",
-                    emoji: x.ticketEmoji,
-                }
-            })
             const panelEmbed = new MessageEmbed()
                 .setAuthor(`${newTitle}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
                 .setDescription(`${messageDescription}`)
                 .setColor("#2f3136")
-            const row = new MessageActionRow().addComponents(
-                new MessageSelectMenu()
-                    .setCustomId("SUPPORT-SYSTEM")
-                    .setMaxValues(1)
-                    .addOptions(options)
-            )        
-            interaction.reply({content: "Panel sent correctly!", ephemeral: true})
-            client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: [row]})
+            if(description == 'no') {
+                const options = guildData.tickets.map(x => {
+                    return {
+                        label: x.ticketName,
+                        value: x.customID,
+                        emoji: x.ticketEmoji,
+                    }
+                })
+                const row = new MessageActionRow().addComponents(
+                    new MessageSelectMenu()
+                        .setCustomId("SUPPORT-SYSTEM")
+                        .setMaxValues(1)
+                        .addOptions(options)
+                )
+                interaction.reply({content: `Panel sent correctly to ${channel}!`, ephemeral: true})
+                client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: [row]})
+            } else {
+                const options = guildData.tickets.map(x => {
+                    return {
+                        label: x.ticketName,
+                        value: x.customID,
+                        description: x.ticketDescription || "Support Ticket",
+                        emoji: x.ticketEmoji,
+                    }
+                })
+                const row = new MessageActionRow().addComponents(
+                    new MessageSelectMenu()
+                        .setCustomId("SUPPORT-SYSTEM")
+                        .setMaxValues(1)
+                        .addOptions(options)
+                )
+                interaction.reply({content: `Panel sent correctly to ${channel}!`, ephemeral: true})
+                client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: [row]})     
+            }
         }
     },
 };
