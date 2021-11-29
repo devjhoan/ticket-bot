@@ -13,50 +13,9 @@ client.on("interactionCreate", async (interaction) => {
             const guildData = await ticketSchema.findOne({
                 guildID: interaction.guild.id
             })
-            if(!guildData.roles || !guildData.roles.staffRole) return interaction.reply({content: mensajes["NO-ROLES-CONFIG"], ephemeral: true})
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
             var staffRole = guildData.roles.staffRole;
             if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
-            let transcriptcanal = guildData.channelTranscript;
-            let logcanal = guildData.channelLog;
-            if(config.TICKET["USER-SEND-TRANSCRIPT"] == false) {
-                interaction.deferUpdate();
-                if(!interaction.member.roles.cache.get(staffRole)) {
-                    return;
-                }
-                // Transcript Attachment
-                const file = await discordTranscripts.createTranscript(interaction.channel, {
-                    limit: -1,
-                    returnBuffer: false,
-                    fileName: `transcript-${interaction.channel.name}.html`
-                });
-                // Transcript message!
-                const mensaje = new MessageEmbed()
-                    .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Transcript", "https://emoji.gg/assets/emoji/8704-archive.png")
-                    .addField("Ticket Owner", `<@!${idmiembro}>`, true)
-                    .addField("Ticket Name", `${interaction.channel.name}`, true)
-                    .addField("Ticket Closed By:", `<@!${interaction.member.user.id}>`, true)
-                    .setColor("#2f3136")
-                    .setTimestamp()
-                await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje], files: [file]})
-                // Transcipt send to transcript channel!
-                const trsend = new MessageEmbed()
-                    .setDescription(`${mensajes["TICKET-STAFF-CONTROLS"]["TRANSCRIPT-SAVED"]} <#${transcriptcanal}>`)
-                    .setColor("GREEN")
-                interaction.channel.send({embeds: [trsend]})
-                // Transcipt log Channel!
-                if(!guildData.channelLog) return;
-                if(config.TICKET["LOGS-SYSTEM"] == true) {
-                    const log = new MessageEmbed().setAuthor(""+config.TICKET["SERVER-NAME"]+" | Transcript Saved", "https://emoji.gg/assets/emoji/8704-archive.png").setColor("ORANGE")
-                    .setDescription(`**User**: <@!${interaction.member.user.id}>\n**Action**: Save a ticket transcript\n**Ticket**: ${interaction.channel.name}`).setFooter("Ticket System by: Jhoan#6969")
-                    interaction.client.channels.cache.get(logcanal).send({embeds: [log]}); 
-                }
-                if(config.TICKET["LOGS-SYSTEM"] == false) {
-                    return;
-                }
-
-            }
-            if(config.TICKET['USER-SEND-TRANSCRIPT'] == true) {
                 interaction.deferUpdate();
                 if(!interaction.member.roles.cache.get(staffRole)) {
                     return;
@@ -79,7 +38,6 @@ client.on("interactionCreate", async (interaction) => {
                     embeds: [new MessageEmbed().setDescription(mensajes["TICKET-STAFF-CONTROLS"]["USER-TRANSCRIPT"]).setColor("#2f3136")],
                     components: [trow]
                 })
-            }
         }
     }
     if(interaction.isButton()) {
@@ -94,13 +52,11 @@ client.on("interactionCreate", async (interaction) => {
         if(interaction.customId == "TR-CN") {
             interaction.deferUpdate();  
             if(!interaction.member.roles.cache.get(staffRole)) {
-                return console.log("No tiene el rol");
+                return
             }
             interaction.message.delete();
         }
         if(interaction.customId == "TR-YES") {
-            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-            if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
             interaction.deferUpdate();
             if(!interaction.member.roles.cache.get(staffRole)) {
                 return;
@@ -114,13 +70,28 @@ client.on("interactionCreate", async (interaction) => {
             });
             // Transcript message!
             const mensaje = new MessageEmbed()
-                .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Transcript", "https://emoji.gg/assets/emoji/8704-archive.png")
+                .setAuthor(interaction.client.users.cache.get(idmiembro).tag, interaction.client.users.cache.get(idmiembro).avatarURL({dynamic: true}))
                 .addField("Ticket Owner", `<@!${idmiembro}>`, true)
                 .addField("Ticket Name", `${interaction.channel.name}`, true)
-                .addField("Ticket Closed By:", `<@!${interaction.member.user.id}>`, true)
                 .setColor("#2f3136")
-                .setTimestamp()
-            await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje], files: [file]})
+            await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje], files: [file]}).then((a) => {
+                const Data = guildData.tickets.find(
+                  (x) => x.ticketCategory === interaction.channel.parentId
+                );
+                const users = interaction.channel.messages.cache.filter(m => m.author.id !== interaction.client.user.id).map(m => m.author.id);
+                const usersData = users.map(u => interaction.client.users.cache.get(u));
+                const usuarios = [];
+                usersData.forEach(u => {
+                    const messages = interaction.channel.messages.cache.filter(m => m.author.id === u.id).size;
+                    usuarios.push(`${messages} - <@!${u.id}> - ${u.tag}`);
+                });
+                // remove the users repeated in the array
+                const uniqueUsers = [...new Set(usuarios)];
+                a.edit({embeds: [mensaje
+                .addField("Panel Name", `${Data.ticketName}`, true)
+                .addField("Direct Transcript", `[Direct Transcript](${a.attachments.first().url})`, true)
+                .addField("Users in transcript", `${uniqueUsers.join("\n")}`, true)
+            ]})})
             // Transcipt send to transcript channel!
             const trsend = new MessageEmbed()
                 .setDescription(`${mensajes["TICKET-STAFF-CONTROLS"]["TRANSCRIPT-SAVED"]} <#${transcriptcanal}>`)
@@ -141,18 +112,11 @@ client.on("interactionCreate", async (interaction) => {
             }
             // Transcipt log Channel!
             if(!guildData.channelLog) return;
-            if(config.TICKET["LOGS-SYSTEM"] == true) {
                 const log = new MessageEmbed().setAuthor(""+config.TICKET["SERVER-NAME"]+" | Transcript Saved", "https://emoji.gg/assets/emoji/8704-archive.png").setColor("ORANGE")
                 .setDescription(`**User**: <@!${interaction.member.user.id}>\n**Action**: Save a ticket transcript\n**Ticket**: ${interaction.channel.name}`).setFooter("Ticket System by: Jhoan#6969")
                 interaction.client.channels.cache.get(logcanal).send({embeds: [log]}); 
-            }
-            if(config.TICKET["LOGS-SYSTEM"] == false) {
-                return;
-            }
         }
         if(interaction.customId == "TR-NO") {
-            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-            if(!guildData.channelTranscript) return interaction.reply({content: `${mensajes['NO-TRANSCRIPT-CHANNEL']}`, ephemeral: true})
             interaction.deferUpdate();
             if(!interaction.member.roles.cache.get(staffRole)) {
                 return;
@@ -166,13 +130,29 @@ client.on("interactionCreate", async (interaction) => {
             });
             // Transcript message!
             const mensaje = new MessageEmbed()
-                .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Transcript", "https://emoji.gg/assets/emoji/8704-archive.png")
+                .setAuthor(interaction.client.users.cache.get(idmiembro).tag, interaction.client.users.cache.get(idmiembro).avatarURL({dynamic: true}))
                 .addField("Ticket Owner", `<@!${idmiembro}>`, true)
                 .addField("Ticket Name", `${interaction.channel.name}`, true)
-                .addField("Ticket Closed By:", `<@!${interaction.member.user.id}>`, true)
                 .setColor("#2f3136")
-                .setTimestamp()
-            await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje], files: [file]})
+            await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje], files: [file]}).then((a) => {
+                const Data = guildData.tickets.find(
+                  (x) => x.ticketCategory === interaction.channel.parentId
+                );
+                const users = interaction.channel.messages.cache.filter(m => m.author.id !== interaction.client.user.id).map(m => m.author.id);
+                const usersData = users.map(u => interaction.client.users.cache.get(u));
+                const usuarios = [];
+                usersData.forEach(u => {
+                    const messages = interaction.channel.messages.cache.filter(m => m.author.id === u.id).size;
+                    usuarios.push(`${messages} - <@!${u.id}> - ${u.tag}`);
+                });
+                // remove the users repeated in the array
+                const uniqueUsers = [...new Set(usuarios)];
+                a.edit({embeds: [mensaje
+                .addField("Panel Name", `${Data.ticketName}`, true)
+                .addField("Direct Transcript", `[Direct Transcript](${a.attachments.first().url})`, true)
+                .addField("Users in transcript", `${uniqueUsers.join("\n")}`, true)
+            ]})})
+            
             // Transcipt send to transcript channel!
             const trsend = new MessageEmbed()
                 .setDescription(`${mensajes["TICKET-STAFF-CONTROLS"]["TRANSCRIPT-SAVED"]} <#${transcriptcanal}>`)
@@ -180,14 +160,8 @@ client.on("interactionCreate", async (interaction) => {
             interaction.channel.send({embeds: [trsend]})
             // Transcipt log Channel!
             if(!guildData.channelLog) return;
-            if(config.TICKET["LOGS-SYSTEM"] == true) {
-                const log = new MessageEmbed().setAuthor(""+config.TICKET["SERVER-NAME"]+" | Transcript Saved", "https://emoji.gg/assets/emoji/8704-archive.png").setColor("ORANGE")
-                .setDescription(`**User**: <@!${interaction.member.user.id}>\n**Action**: Save a ticket transcript\n**Ticket**: ${interaction.channel.name}`).setFooter("Ticket System by: Jhoan#6969")
-                interaction.client.channels.cache.get(logcanal).send({embeds: [log]}); 
-            }
-            if(config.TICKET["LOGS-SYSTEM"] == false) {
-                return;
-            }
+            const log = new MessageEmbed().setAuthor(""+config.TICKET["SERVER-NAME"]+" | Transcript Saved", "https://emoji.gg/assets/emoji/8704-archive.png").setColor("ORANGE").setDescription(`**User**: <@!${interaction.member.user.id}>\n**Action**: Save a ticket transcript\n**Ticket**: ${interaction.channel.name}`).setFooter("Ticket System by: Jhoan#6969")
+            interaction.client.channels.cache.get(logcanal).send({embeds: [log]}); 
         };
     }
 });
