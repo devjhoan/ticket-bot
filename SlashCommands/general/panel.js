@@ -29,7 +29,7 @@ module.exports = {
             description: 'Channel where the panel will be created',
             type: 'CHANNEL',
             channelTypes: ["GUILD_TEXT"],
-            required: true,
+            required: false,
         },
         {
             name: 'description',
@@ -62,7 +62,7 @@ module.exports = {
             guildID: interaction.guild.id
         })
         const type = interaction.options.getString('type');
-        const channel = interaction.options.getChannel('channel');
+        const channel = interaction.options.getChannel('channel') || interaction.channel;
         const description = interaction.options.getString('description');
 
         var newTitle = config.TICKET["SERVER-NAME"];
@@ -87,15 +87,13 @@ module.exports = {
                         .setEmoji(options[i].emoji)
                         .setStyle("SECONDARY")
                     lastComponents.addComponents(button)
-                    if(lastComponents.components.length === 3) {
+                    if(lastComponents.components.length === 6) {
                         components.push(lastComponents)
                         lastComponents = new MessageActionRow();
                     }
                 }
             }
-            if(lastComponents.components.length > 0) {
-                components.push(lastComponents)
-            }
+            if(lastComponents.components.length > 0) {components.push(lastComponents)}
             const panelEmbed = new MessageEmbed()
                 .setAuthor(`${newTitle}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
                 .setDescription(`${messageDescription}`)
