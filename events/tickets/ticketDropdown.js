@@ -11,6 +11,7 @@ client.on("interactionCreate", async (interaction) => {
         if(interaction.customId !== "SUPPORT-SYSTEM") return;
         const guildData = await ticketSchema.findOne({guildID: interaction.guild.id,})
         const Data = guildData.tickets.find(x => x.customID === interaction.values[0]);
+        const ticketRoles = await Data.ticketRoles.map(x => {return {id: x,allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]}});   
         let staffRole = guildData.roles.staffRole;
         let memberID = interaction.member.user.id;
 
@@ -39,10 +40,7 @@ client.on("interactionCreate", async (interaction) => {
                     id: memberID,
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]
                 },
-                {
-                    id: staffRole,
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]
-                }
+                ...ticketRoles
             ]
         }).then(async channel => {
             const row = new MessageActionRow().addComponents(
