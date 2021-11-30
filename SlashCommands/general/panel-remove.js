@@ -41,7 +41,7 @@ module.exports = {
         const filteredTickets = guildTicket.filter(x => x.customID != ide)
         guildData.tickets = filteredTickets;
 
-        await guildData.save().catch(err => console.log(err))
+        await guildData.save()
 
         let embed = new MessageEmbed()
             .setColor('#0099ff')
