@@ -3,33 +3,32 @@ const config = require('../../config/config.json');
 const client = require("../../index");
 const mensajes = require('../../config/messages.json');
 const ticketSchema = require("../../models/ticketSchema");
+const getNumber = require("../../functions/numberTicket");
 
 client.on("interactionCreate", async (interaction) => {
     if(interaction.isSelectMenu()) {
+        await interaction.deferUpdate();
         if(interaction.customId !== "SUPPORT-SYSTEM") return;
-        if(!config.TICKET["NUMBER-TICKET"]) {
-        let wea = interaction.values[0];
-        // code main 
-        const guildData = await ticketSchema.findOne({
-            guildID: interaction.guild.id,
-        })
-        var staffRole = guildData.roles.staffRole;
-        const guildTicket = guildData.tickets
-        const Data = guildTicket.find(x => x.customID === wea);
+        const guildData = await ticketSchema.findOne({guildID: interaction.guild.id,})
+        const Data = guildData.tickets.find(x => x.customID === interaction.values[0]);
+        let staffRole = guildData.roles.staffRole;
+        let memberID = interaction.member.user.id;
 
-        let ide = interaction.member.user.id;
+        interaction.editReply({embeds: [new MessageEmbed()
+            .setAuthor(`${config.TICKET["SERVER-NAME"]}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
+            .setDescription(`${mensajes["MESSAGE-EMBED"]}`)
+            .setColor("#2f3136")]})
 
-        const blacklistData = guildData.usersBlacklisted;
-        const findBlacklisted = blacklistData.find(user => user.userID === ide);
+        let numberTicket = await getNumber(guildData.ticketCounter, ticketSchema, interaction.guild.id);
+
+        const findBlacklisted = guildData.usersBlacklisted.find(user => user.userID === memberID)
         if(findBlacklisted) {
-            let reason = findBlacklisted.reason;
-            let a = mensajes['BLACKLISTED-MSG'].replace('<reason>', reason);
-            return interaction.reply({embeds: [new MessageEmbed().setDescription(a).setColor("RED")], ephemeral: true});
+            return interaction.followUp({embeds: [new MessageEmbed().setColor("RED").setDescription(mensajes['BLACKLISTED-MSG'].replace('<reason>', findBlacklisted.reason))], ephemeral: true});
         }
-
-        interaction.guild.channels.create(`ticket-${interaction.member.user.username}`, {
+        
+        interaction.guild.channels.create(`ticket-${numberTicket}`, {
             type: "text",
-            topic: `${interaction.member.user.id}`,
+            topic: `${memberID}`,
             parent: Data.ticketCategory,
             permissionOverwrites : [
                 {
@@ -37,7 +36,7 @@ client.on("interactionCreate", async (interaction) => {
                     deny: ["VIEW_CHANNEL"]
                 },
                 {
-                    id: interaction.member.user.id,
+                    id: memberID,
                     allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]
                 },
                 {
@@ -48,157 +47,42 @@ client.on("interactionCreate", async (interaction) => {
         }).then(async channel => {
             const row = new MessageActionRow().addComponents(
                 new MessageButton()
-                .setStyle("SECONDARY")
-                .setLabel("Close")
-                .setEmoji("🔒")
-                .setCustomId("Ticket-Open-Close"),
-            new MessageButton()
-                .setStyle("SECONDARY")
-                .setLabel("Claim")
-                .setEmoji("👋")
-                .setCustomId("Ticket-Claimed")
-            )
-            const welcome = new MessageEmbed()
-              .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
-              .setDescription(
-                mensajes["EMBED-PANEL"]
-                  .replace("<member.username>", interaction.member.user.username)
-                  .replace("<ticket.type>", Data.ticketName)
-                  .replace("<member.mention>", interaction.member.user)
-              )
-              .setColor("AQUA")
-              .setFooter(
-                `${config.TICKET["SERVER-NAME"]} - Support System`,
-                client.user.displayAvatarURL()
-              );
-                if(config.TICKET["MENTION-STAFF"] == true) {
-                channel.send({
-                    content: `<@!${interaction.member.user.id}> | <@&${staffRole}>`,
-                    embeds: [welcome],
-                    components: [row]
-                })
-            } else {
-                channel.send({
-                    content: `<@!${interaction.member.user.id}>`,
-                    embeds: [welcome],
-                    components: [row]
-                })
-            }
-            interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
-            if(!guildData.channelLog) return;
-            if(config.TICKET["LOGS-SYSTEM"] == true) {
-                const log = new MessageEmbed()
-                .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Created", "https://emoji.gg/assets/emoji/1270-chat.png")
-                .setColor("GREEN")
-                .setDescription(`
-                **User**: <@!${interaction.member.user.id}>
-                **Action**: Created a ticket
-                **Panel**: ${Data.ticketName}
-                **Ticket Name**: ${channel.name}`)
-                .setFooter("Ticket System by: Jhoan#6969")
-            interaction.client.channels.cache.get(guildData.channelLog).send({embeds: [log]});
-            } else {
-                return;
-            }
-        })
-    } else {
-        let wea = interaction.values[0];
-        // code main 
-        const guildData = await ticketSchema.findOne({
-            guildID: interaction.guild.id,
-        })
-        const guildTicket = guildData.tickets
-        let ticketNumber = guildData.ticketCounter;
-        const Data = guildTicket.find(x => x.customID === wea);
-
-        var staffRole = guildData.roles.staffRole;
-        let ide = interaction.member.user.id;
-        const blacklistData = guildData.usersBlacklisted;
-        const findBlacklisted = blacklistData.find(user => user.userID === ide);
-        if(findBlacklisted) {
-            let reason = findBlacklisted.reason;
-            let a = await mensajes['BLACKLISTED-MSG'].replace('<reason>', reason);
-            return interaction.reply({embeds: [new MessageEmbed().setDescription(a).setColor("RED")], ephemeral: true});
-        }
-
-        if(ticketNumber = 0) {
-            await ticketSchema.findOneAndUpdate({guildID: interaction.guild.id}, {$set: {ticketCounter: 1}})
-        } else {
-            await ticketSchema.findOneAndUpdate({guildID: interaction.guild.id}, {$inc: {ticketCounter: 1}})
-            let numero = await ticketSchema.findOne({guildID: interaction.guild.id})
-            ticketNumber = numero.ticketCounter;
-            const zeroPad = (num, places) => String(num).padStart(places, '0')
-            var numnew = zeroPad(ticketNumber, 4);
-        }
-
-        interaction.guild.channels.create(`ticket-${numnew}`, {
-            type: "text",
-            topic: `${interaction.member.user.id}`,
-            parent: Data.ticketCategory,
-            permissionOverwrites : [
-                {
-                    id: interaction.guild.id,
-                    deny: ["VIEW_CHANNEL"]
-                },
-                {
-                    id: interaction.member.user.id,
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]
-                },
-                {
-                    id: staffRole,
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]
-                }
-            ]
-        }).then(async channel => {
-            const row = new MessageActionRow().addComponents(
+                    .setStyle("SECONDARY")
+                    .setLabel("Close")
+                    .setEmoji("🔒")
+                    .setCustomId("Ticket-Open-Close"),
                 new MessageButton()
-                .setStyle("SECONDARY")
-                .setLabel("Close")
-                .setEmoji("🔒")
-                .setCustomId("Ticket-Open-Close"),
-            new MessageButton()
-                .setStyle("SECONDARY")
-                .setLabel("Claim")
-                .setEmoji("👋")
-                .setCustomId("Ticket-Claimed")
-            )
+                    .setStyle("SECONDARY")
+                    .setLabel("Claim")
+                    .setEmoji("👋")
+                    .setCustomId("Ticket-Claimed"))
             const welcome = new MessageEmbed()
                 .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
                 .setDescription(mensajes["EMBED-PANEL"].replace('<member.username>', interaction.member.user.username).replace('<ticket.type>', Data.ticketName).replace('<member.mention>', interaction.member.user))
                 .setColor("AQUA")
                 .setFooter(`${config.TICKET["SERVER-NAME"]} - Support System`, client.user.displayAvatarURL())
-                if(config.TICKET["MENTION-STAFF"] == true) {
+            if(config.TICKET["MENTION-STAFF"]) {
                 channel.send({
-                    content: `<@!${interaction.member.user.id}> | <@&${staffRole}>`,
+                    content: `<@!${memberID}> | <@&${staffRole}>`,
+                    embeds: [welcome],
+                    components: [row]
+                })
+            } else {
+                channel.send({
+                    content: `<@!${memberID}>`,
                     embeds: [welcome],
                     components: [row]
                 })
             }
-            if(config.TICKET["MENTION-STAFF"] == false) {
-                channel.send({
-                    content: `<@!${interaction.member.user.id}>`,
-                    embeds: [welcome],
-                    components: [row]
-                })
-            }
-            interaction.reply({content: `Ticket created <#${channel.id}>`, ephemeral: true})
-            if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
-            let logcanal = guildData.channelLog;
-            if(!logcanal) return;
-            if(config.TICKET["LOGS-SYSTEM"] == true) {
+            interaction.followUp({content: `Ticket created <#${channel.id}>`, ephemeral: true})
+            let channelLOG = guildData.channelLog;
+            if(!channelLOG) return;
                 const log = new MessageEmbed()
                 .setAuthor(""+config.TICKET["SERVER-NAME"]+" | Ticket Created", "https://emoji.gg/assets/emoji/1270-chat.png")
                 .setColor("GREEN")
-                .setDescription(`
-                **User**: <@!${interaction.member.user.id}>
-                **Action**: Created a ticket
-                **Panel**: ${Data.ticketName}
-                **Ticket Name**: ${channel.name}`)
+                .setDescription(`**User**: <@!${memberID}>\n**Action**: Created a ticket\n**Panel**: ${Data.ticketName}\n**Ticket Name**: ${channel.name}`)
                 .setFooter("Ticket System by: Jhoan#6969")
-            interaction.client.channels.cache.get(logcanal).send({embeds: [log]});
-            }
-            if(config.TICKET["LOGS-SYSTEM"] == false) {
-                return;
-            }    
-})}}
+            interaction.client.channels.cache.get(channelLOG).send({embeds: [log]});  
+        })
+    }
 })
