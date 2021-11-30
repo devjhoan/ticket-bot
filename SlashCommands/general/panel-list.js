@@ -46,15 +46,17 @@ module.exports = {
                 ticketName: x.ticketName,
                 ticketDescription: x.ticketDescription,
                 ticketCategory: x.ticketCategory,
-                ticketEmoji: x.ticketEmoji
+                ticketEmoji: x.ticketEmoji,
+                ticketRoles: x.ticketRoles,
                 }
             })
         for(let i = 0; i < options.length; i++) {
             data.push(`**ID:** ${options[i].customID}`)
+            data.push(`**Emoji:** ${options[i].ticketEmoji || "No specified!"}`)
             data.push(`**Name:** ${options[i].ticketName}`)
             data.push(`**Description:** ${options[i].ticketDescription || "No specified!"}`)
             data.push(`**Category:** ${options[i].ticketCategory || "No specified!"}`)
-            data.push(`**Emoji:** ${options[i].ticketEmoji || "No specified!"}\n`)
+            data.push(`**Roles:** ${options[i].ticketRoles.map(x => interaction.guild.roles.cache.get(x)).join(", ") + "\n"|| "No specified!"}`)
         }
         const embed = new MessageEmbed()
             .setColor('#0099ff')
