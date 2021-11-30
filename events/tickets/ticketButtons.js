@@ -8,12 +8,15 @@ const config = require('../../config/config.json');
 client.on("interactionCreate", async (interaction) => {
     if(interaction.isButton()) {
         const guildData = await ticketSchema.findOne({guildID: interaction.guild.id,})
-        const Data = guildData.tickets.find(x => x.customID === interaction.customId);
-        let mapCustomID = guildData.tickets.map(x => x.customID);
-        let staffRole = guildData.roles.staffRole;
-        let memberID = interaction.member.user.id;
+        let mapCustomID = guildData.tickets.map(x => x.customID); 
 
         if(!mapCustomID.includes(interaction.customId)) return;
+
+        const Data = guildData.tickets.find(x => x.customID === interaction.customId);
+        let staffRole = guildData.roles.staffRole;
+        let memberID = interaction.member.user.id;   
+        const ticketRoles = await Data.ticketRoles.map(x => {return {id: x,allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]}});    
+
         await interaction.reply({embeds: [new MessageEmbed().setColor("ORANGE").setDescription("Creating ticket...")], ephemeral: true})
         let numberTicket = await getNumber(guildData.ticketCounter, ticketSchema, interaction.guild.id);
 
@@ -26,9 +29,7 @@ client.on("interactionCreate", async (interaction) => {
             type: "text",
             topic: `${memberID}`,
             parent: Data.ticketCategory,
-            permissionOverwrites : [
-                {id: interaction.guild.id, deny: ["VIEW_CHANNEL"]},{id: memberID, allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]},{id: staffRole, allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS", "MANAGE_MESSAGES", "MANAGE_CHANNELS"]}
-            ]
+            permissionOverwrites : [{id: interaction.guild.id,deny: ["VIEW_CHANNEL"]},{id: memberID,allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADD_REACTIONS", "ATTACH_FILES", "EMBED_LINKS"]},...ticketRoles]
         }).then(async channel => {
             const row = new MessageActionRow().addComponents(
                 new MessageButton().setStyle("SECONDARY").setLabel("Close").setEmoji("🔒").setCustomId("Ticket-Open-Close"),
