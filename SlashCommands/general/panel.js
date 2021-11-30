@@ -87,7 +87,7 @@ module.exports = {
                         .setEmoji(options[i].emoji)
                         .setStyle("SECONDARY")
                     lastComponents.addComponents(button)
-                    if(lastComponents.components.length === 6) {
+                    if(lastComponents.components.length === 5) {
                         components.push(lastComponents)
                         lastComponents = new MessageActionRow();
                     }
@@ -98,8 +98,8 @@ module.exports = {
                 .setAuthor(`${newTitle}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
                 .setDescription(`${messageDescription}`)
                 .setColor("#2f3136")
-            interaction.reply({content: "Panel sent correctly!", ephemeral: true})
-            interaction.channel.send({embeds: [panelEmbed], components: components})
+            await client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: components}) 
+            interaction.reply({content: `Panel sent correctly to ${channel}!`, ephemeral: true})
         } else {
             if(!guildData) return interaction.reply({content: `${mensajes['NO-SERVER-FIND']}`, ephemeral: true})
             if(!guildData.tickets || guildData.tickets.length === 0) return interaction.reply({content: `${mensajes['NO-TICKET-FIND']}`, ephemeral: true})
@@ -139,8 +139,8 @@ module.exports = {
                         .setMaxValues(1)
                         .addOptions(options)
                 )
+                await client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: [row]})     
                 interaction.reply({content: `Panel sent correctly to ${channel}!`, ephemeral: true})
-                client.channels.cache.get(channel.id).send({embeds: [panelEmbed], components: [row]})     
             }
         }
     },
