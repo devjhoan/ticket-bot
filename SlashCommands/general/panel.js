@@ -17,6 +17,10 @@ module.exports = {
                 {
                     name: 'dropdown',
                     value: 'ticket panel using dropdown menus'
+                },
+                {
+                    name: 'buttons',
+                    value: 'ticket panel using buttons'
                 }
             ],
         },
