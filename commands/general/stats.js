@@ -1,6 +1,7 @@
 const { Client, Message, MessageEmbed } = require('discord.js');
 const config = require('../../config/config.json')
 const ticketSchema = require("../../models/ticketSchema");
+const mensajes = require("../../config/messages");
 
 module.exports = {
   name: "stats",
