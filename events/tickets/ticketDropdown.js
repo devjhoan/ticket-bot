@@ -15,9 +15,18 @@ client.on("interactionCreate", async (interaction) => {
         let staffRole = guildData.roles.staffRole;
         let memberID = interaction.member.user.id;
 
+        const options = guildData.tickets.map(x => {
+            return {
+                label: x.ticketName,
+                value: x.customID,
+                emoji: x.ticketEmoji,
+                name: x.ticketName,
+            }
+        });
+
         interaction.editReply({embeds: [new MessageEmbed()
             .setAuthor(`${config.TICKET["SERVER-NAME"]}`, 'https://emoji.gg/assets/emoji/7607-cyansmalldot.png')
-            .setDescription(`${mensajes["MESSAGE-EMBED"]}`)
+            .setDescription(`${mensajes["MESSAGE-EMBED"]}\n\n${options.map(x => `${x.emoji} **${x.name}**`).join('\n')}`)
             .setColor("#2f3136")]})
 
         let numberTicket = await getNumber(guildData.ticketCounter, ticketSchema, interaction.guild.id);
@@ -44,16 +53,8 @@ client.on("interactionCreate", async (interaction) => {
             ]
         }).then(async channel => {
             const row = new MessageActionRow().addComponents(
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Close")
-                    .setEmoji("🔒")
-                    .setCustomId("Ticket-Open-Close"),
-                new MessageButton()
-                    .setStyle("SECONDARY")
-                    .setLabel("Claim")
-                    .setEmoji("👋")
-                    .setCustomId("Ticket-Claimed"))
+                new MessageButton().setStyle("SECONDARY").setLabel("Close").setEmoji("🔒").setCustomId("Ticket-Open-Close"),
+                new MessageButton().setStyle("SECONDARY").setLabel("Claim").setEmoji("👋").setCustomId("Ticket-Claimed"))
             const welcome = new MessageEmbed()
                 .setTitle(`${config.TICKET["SERVER-NAME"]} | Support Center`)
                 .setDescription(mensajes["EMBED-PANEL"].replace('<member.username>', interaction.member.user.username).replace('<ticket.type>', Data.ticketName).replace('<member.mention>', interaction.member.user))
