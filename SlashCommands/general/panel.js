@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu, GuildApplicationCommandManager } = require("discord.js");
 const config = require('../../config/config.json')
 const mensajes = require('../../config/messages.json');
 const ticketSchema = require("../../models/ticketSchema");
