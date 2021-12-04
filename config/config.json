@@ -1,10 +1,10 @@
 {
-    "TOKEN": "YOUR-TOKEN-HERE",
-    "GUILD-ID": "GUILD-ID-HERE",
-    "MONGOOSECONNECTIONSTRING": "MONGO-CONNECTION-STRING-HERE",
+    "TOKEN": "ODc0MzIyMjkxNDk0ODc5Mjcz.YRFSFg.g7cDRfG194oD0Kj2S7tJKxewtFY",
+    "GUILD-ID": "879478494810210364",
+    "MONGOOSECONNECTIONSTRING": "mongodb+srv://crowl-user:gnxH6DkcVWHTXJdD@crowl-bots.dunpn.mongodb.net/TicketTest",
     "PREFIX": "$",
     "TICKET": {
-        "SERVER-NAME": "SERVER-NAME-HERE",
+        "SERVER-NAME": "Crowl Network",
         "LOGS-SYSTEM": true,
         "MENTION-STAFF": false
     },

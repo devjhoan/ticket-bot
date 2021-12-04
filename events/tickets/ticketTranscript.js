@@ -45,13 +45,8 @@ client.on("interactionCreate", async (interaction) => {
 			const mensaje = new MessageEmbed().setAuthor(interaction.client.users.cache.get(idmiembro).tag, interaction.client.users.cache.get(idmiembro).avatarURL({dynamic: true})).addField("Ticket Owner", `<@!${idmiembro}>`, true).addField("Ticket Name", `${interaction.channel.name}`, true).setColor("#2f3136")
 			await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje],files: [file]}).then((a) => {
 				const Data = guildData.tickets.find((x) => x.ticketCategory === interaction.channel.parentId);
-				const users = interaction.channel.messages.cache.filter(m => m.author.id !== interaction.client.user.id).map(m => m.author.id);
-				const usersData = users.map(u => interaction.client.users.cache.get(u));
-				const usuarios = [];
-				usersData.forEach(u => {const messages = interaction.channel.messages.cache.filter(m => m.author.id === u.id).size;usuarios.push(`${messages} - <@!${u.id}> - ${u.tag}`);});
 
-				const uniqueUsers = [...new Set(usuarios)]
-				a.edit({embeds: [mensaje.addField("Panel Name", `${Data.ticketName}`, true).addField("Direct Transcript", `[Direct Transcript](${a.attachments.first().url})`, true).addField("Users in transcript", `${uniqueUsers.join("\n") || "No users!"}`, true)]})
+				a.edit({embeds: [mensaje.addField("Panel Name", `${Data.ticketName}`, true).addField("Direct Transcript", `[Direct Transcript](${a.attachments.first().url})`, true).addField("Ticket Closed", `${interaction.member.user}`, true)]})
 			})
 
 			const trsend = new MessageEmbed().setDescription(`${mensajes["TICKET-STAFF-CONTROLS"]["TRANSCRIPT-SAVED"]} <#${transcriptcanal}>`).setColor("GREEN")
@@ -77,20 +72,15 @@ client.on("interactionCreate", async (interaction) => {
 			const mensaje = new MessageEmbed().setAuthor(interaction.client.users.cache.get(idmiembro).tag, interaction.client.users.cache.get(idmiembro).avatarURL({dynamic: true})).addField("Ticket Owner", `<@!${idmiembro}>`, true).addField("Ticket Name", `${interaction.channel.name}`, true).setColor("#2f3136")
 			await client.channels.cache.get(transcriptcanal).send({embeds: [mensaje],files: [file]}).then((a) => {
 				const Data = guildData.tickets.find((x) => x.ticketCategory === interaction.channel.parentId);
-				const users = interaction.channel.messages.cache.filter(m => m.author.id !== interaction.client.user.id).map(m => m.author.id);
-				const usersData = users.map(u => interaction.client.users.cache.get(u));
-				const usuarios = [];
-				usersData.forEach(u => {const messages = interaction.channel.messages.cache.filter(m => m.author.id === u.id).size;usuarios.push(`${messages} - <@!${u.id}> - ${u.tag}`);});
 
-				const uniqueUsers = [...new Set(usuarios)]
-				a.edit({embeds: [mensaje.addField("Panel Name", `${Data.ticketName}`, true).addField("Direct Transcript", `[Direct Transcript](${a.attachments.first().url})`, true).addField("Users in transcript", `${uniqueUsers.join("\n") || "No users!"}`, true)]})
+				a.edit({embeds: [mensaje.addField("Panel Name", `${Data.ticketName}`, true).addField("Direct Transcript", `[Direct Transcript](${a.attachments.first().url})`, true).addField("Ticket Closed", `${interaction.member.user}`, true)]})
 			})
 
 			const trsend = new MessageEmbed().setDescription(`${mensajes["TICKET-STAFF-CONTROLS"]["TRANSCRIPT-SAVED"]} <#${transcriptcanal}>`).setColor("GREEN")
 			;(await savingMessage).edit({embeds: [trsend]})
 
 			if (!guildData.channelLog) return;
-			const log = new MessageEmbed().setAuthor("" + config.TICKET["SERVER-NAME"] + " | Transcript Saved", "https://emoji.gg/assets/emoji/8704-archive.png").setColor("ORANGE").setDescription(`**User**: <@!${interaction.member.user.id}>\n**Action**: Save a ticket transcript\n**Ticket**: ${interaction.channel.name}`).setFooter("Ticket System by: Jhoan#6969")
+			const log = new MessageEmbed().setAuthor(config.TICKET["SERVER-NAME"] + " | Transcript Saved", "https://emoji.gg/assets/emoji/8704-archive.png").setColor("ORANGE").setDescription(`**User**: <@!${interaction.member.user.id}>\n**Action**: Save a ticket transcript\n**Ticket**: ${interaction.channel.name}`).setFooter("Ticket System by: Jhoan#6969")
 			interaction.client.channels.cache.get(logcanal).send({embeds: [log]});
 		};
 	}

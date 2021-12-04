@@ -11,6 +11,10 @@ const ticketSchema = new mongoose.Schema ({
     ticketCounter: Number,
     channelLog: String,
     channelTranscript: String,
+    reactionData: {
+        channel: String,
+        message: String,
+    }
 })
 
 module.exports = mongoose.model('ticketSchema', ticketSchema)
