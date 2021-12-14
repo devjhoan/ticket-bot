@@ -2,6 +2,8 @@
 
 Strider tickets is a discord bot focused on managing tickets channels, yes, it is free and 'open source', I have created strider-tickets as an alternative to discord bots that charge you for premium functions!
 
+Need support? enter our [Discord](https://strider.cloud)
+
 ## Features
 - Highly customisable
 - Easy setup [using slash commands]
