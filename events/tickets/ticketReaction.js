@@ -9,7 +9,7 @@ client.on("ready", async () => {
     const guildData = await ticketSchema.findOne({
         guildID: client.guilds.cache.get(config["GUILD-ID"]).id
     })
-    if(guildData.reactionData.channel) {
+    if(guildData.reactionData) {
         client.channels.cache.get(guildData.reactionData.channel).messages.fetch(guildData.reactionData.message)
     }
 });
