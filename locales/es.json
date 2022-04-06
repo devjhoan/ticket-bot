@@ -15,6 +15,20 @@
 					"no_panels": "No hay paneles de tickets configurados.",
 					"description": "**Aquí está una lista de todos los paneles:**",
 					"footer": "Actualmente está en la página {page} de {pages}."
+				},
+				"send": {
+					"no_panels": "No hay paneles de tickets configurados.",
+					"send_success": "El ticket panel se envió con éxito.",
+					"embed_config": {
+						"separator": "{counter}: {name} - {emoji}",
+						"title": "Sistema de soporte | Crear un ticket",
+						"description": "Al hacer clic en una de las categorías de botones correspondientes en este mensaje, creará un ticket con acceso directo y privado al personal.\n\n__**Categorias de Soporte**__\n{separator}\n\n__**Informacion de Tickets**__\n`•` Antes de crear un ticket, lea los cnales **FAQ** correspondientes.\n`•` El abuso del sistema de tickets dará lugar a **castigo(s)**",
+						"footer": "Utilice los botones a continuación para crear un boleto.",
+						"color": "AQUA"
+					},
+					"embed_send": {
+						"send_success": "commands.ticket_manage.sub_commands.send.embed_send.send_success"
+					}
 				}
 			}
 		}
@@ -25,6 +39,28 @@
 	},
 	"errors": {
 		"bad_mongo_uri": "MONGO_URI no está configurado en config.json",
-		"command_not_found": "No se encontró el comando {comando}"
+		"command_not_found": "No se encontró el comando {comando}",
+		"reached_max_tickets": "You have reached the maximum amount of tickets opened at the same time."
+	},
+	"embeds": {
+		"message_ticket": {
+			"creating": "Creando ticket...",
+			"created": "Ticket creado con éxito.",
+			"title": "Ticket creado | {panel_name} #{ticket_number}",
+			"description": "Hola {member_username}, nuestro personal le responderá lo más rápido posible.\nMientras tanto, describa su problema aquí con el mayor detalle posible.\n\n**Ticket Panel:** {panel_name}\n**Dueño del ticket::** {member_mention}\n**Fecha del Ticket:** {ticket_date}",
+			"color": "AQUA"
+		}
+	},
+	"buttons": {
+		"close": {
+			"text": "Cerrar",
+			"emoji": "🔒",
+			"style": "SECONDARY"
+		},
+		"claim": {
+			"text": "Claimear",
+			"emoji": "👋",
+			"style": "SECONDARY"
+		}
 	}
 }
