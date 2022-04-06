@@ -1,4 +1,24 @@
 {
+	"commands": {
+		"ticket_manage": {
+			"no_specify": "Please specify a sub-command.",
+			"sub_commands": {
+				"setup": {
+					"already_exists": "A ticket panel with that `{custom_id}` ID already exists.",
+					"created": "Ticket panel setup successfully.\n\n{panel_info}"
+				},
+				"delete": {
+					"not_exists": "A ticket panel with that `{custom_id}` ID does not exist.",
+					"deleted": "Ticket panel deleted successfully."
+				},
+				"list": {
+					"no_panels": "There are no ticket panels setup.",
+					"description": "**Here is the list of all the panels:**",
+					"footer": "Currently on page {page} of {pages}."
+				}
+			}
+		}
+	},
 	"system": {
 		"bot_ready": "Bot is ready",
 		"mongo_connected": "MongoDB connected"
@@ -8,3 +28,5 @@
 		"command_not_found": "The {command} command was not found"
 	}
 }
+
+
