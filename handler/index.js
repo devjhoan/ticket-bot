@@ -10,26 +10,13 @@ const globPromise = promisify(glob);
  * @param {Client} client
  */
 module.exports = async (client) => {
-    // Commands
-    const commandFiles = await globPromise(`${process.cwd()}/commands/**/*.js`);
-    commandFiles.map((value) => {
-        const file = require(value);
-        const splitted = value.split("/");
-        const directory = splitted[splitted.length - 2];
-
-        if (file.name) {
-            const properties = { directory, ...file };
-            client.commands.set(file.name, properties);
-        }
-    });
-
     // Events
-    const eventFiles = await globPromise(`${process.cwd()}/events/**/*.js`);
+    const eventFiles = await globPromise(`${process.cwd()}/events/*.js`);
     eventFiles.map((value) => require(value));
 
     // Slash Commands
     const slashCommands = await globPromise(
-        `${process.cwd()}/SlashCommands/*/*.js`
+        `${process.cwd()}/commands/*/*.js`
     );
 
     const arrayOfSlashCommands = [];
@@ -47,8 +34,9 @@ module.exports = async (client) => {
     });
 
     // mongoose
-    const { MONGOOSECONNECTIONSTRING } = require('../config/config.json')
-    if (!MONGOOSECONNECTIONSTRING) return;
+    const { MONGO_URI } = require('../config/config.json')
+    if (!MONGO_URI) return console.error("MONGO_URI is not defined in config.json");
+    if (MONGO_URI === "MONGO-CONNECTION-STRING-HERE") return console.error("MONGO_URI is not defined in config.json");
 
-    mongoose.connect(MONGOOSECONNECTIONSTRING).then(() => console.log('Connected to mongodb'));
+    mongoose.connect(MONGO_URI).then(() => console.log('Connected to mongodb'));
 };
