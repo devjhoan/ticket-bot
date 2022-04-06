@@ -6,7 +6,7 @@ const guildData = new mongoose.Schema({
     ticketCounter: Number,
     usersBlacklisted: Array,
     transcriptChannel: String,
-    mentionStaff: Boolean,
+    mentionStaff: String,
     staffRole: String,
     maxTickets: {
         type: Number,
