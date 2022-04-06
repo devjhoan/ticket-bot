@@ -15,8 +15,43 @@
 					"no_panels": "There are no ticket panels setup.",
 					"description": "**Here is the list of all the panels:**",
 					"footer": "Currently on page {page} of {pages}."
+				},
+				"send": {
+					"no_panels": "There are no ticket panels setup.",
+					"send_success": "The ticket panel was successfully sent!",
+					"embed_config": {
+						"separator": "{counter}: {name} - {emoji}",
+						"title": "Support System | Create Ticket",
+						"description": "By clicking one of the corresponding button categories on this message, you will create a ticket with direct and private access to the staff.\n\n__**Support Categories**__\n{separator}\n\n__**Ticket Information**__\n`•` Before creating a ticket read the proper **FAQ** Channels.\n`•` Abuse of the ticket system will lead to **punishment(s)**",
+						"footer": "Please use the buttons below to create a ticket.",
+						"color": "AQUA"
+					},
+					"embed_send": {
+						"send_success": "commands.ticket_manage.sub_commands.send.embed_send.send_success"
+					}
 				}
 			}
+		}
+	},
+	"embeds": {
+		"message_ticket": {
+			"creating": "Creating ticket...",
+			"created": "Ticket created successfully!",
+			"title": "Ticket Created | {panel_name} #{ticket_number}",
+			"description": "Hello {member_username}, our staff will answer you as quickly as possible.\nIn the meantime, please describe your problem here in as much detail as possible.\n\n**Ticket Panel:** {panel_name}\n**Ticket Owner:** {member_mention}\n**Ticket Date:** {ticket_date}",
+			"color": "AQUA"
+		}
+	},
+	"buttons": {
+		"close": {
+			"text": "Close",
+			"emoji": "🔒",
+			"style": "SECONDARY"
+		},
+		"claim": {
+			"text": "Claim",
+			"emoji": "👋",
+			"style": "SECONDARY"
 		}
 	},
 	"system": {
@@ -25,8 +60,8 @@
 	},
 	"errors": {
 		"bad_mongo_uri": "MONGO_URI is not set in config.json",
-		"command_not_found": "The {command} command was not found"
+		"command_not_found": "The {command} command was not found",
+		"server_without_tickets": "This server no have data for the ticket system.\nPlease create a ticket panel using the command `ticket-manage setup`",
+		"reached_max_tickets": "You have reached the maximum amount of tickets opened at the same time."
 	}
 }
-
-
