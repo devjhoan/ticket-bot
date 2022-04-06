@@ -13,8 +13,10 @@
         "node": "16.x"
     },
     "dependencies": {
+        "chalk": "^4.1.2",
         "discord-html-transcripts": "^1.0.0",
         "discord.js": "^13.1.0",
+        "fs": "^0.0.1-security",
         "glob": "^7.1.7",
         "i18n": "^0.14.2",
         "mongoose": "^6.0.2"
