@@ -1,0 +1,10 @@
+{
+    "TOKEN": "TOKEN_HERE",
+    "GUILD-ID": "SERVER_ID",
+    "MONGO_URI": "MONGO_URI_HERE",
+    "TICKET": {
+        "SERVER-NAME": "SERVER-NAME-HERE",
+        "LOGS-SYSTEM": true,
+        "MENTION-STAFF": false
+    }
+}
