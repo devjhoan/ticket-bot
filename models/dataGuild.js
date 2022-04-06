@@ -3,7 +3,10 @@ const mongoose = require('mongoose')
 const guildData = new mongoose.Schema({
     guildID: String,
     tickets: Array,
-    ticketCounter: Number,
+    ticketCounter: {
+        type: Number,
+        default: 0
+    },
     usersBlacklisted: Array,
     transcriptChannel: String,
     mentionStaff: String,
