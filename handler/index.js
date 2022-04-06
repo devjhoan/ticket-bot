@@ -1,13 +1,13 @@
 const { glob } = require("glob");
 const { promisify } = require("util");
-const { Client } = require("discord.js");
 const mongoose = require("mongoose");
-const config = require('../config/config.json')
+const config = require('../config/config.json');
+const { success, error } = require("../controllers/logger");
 
 const globPromise = promisify(glob);
 
 /**
- * @param {Client} client
+ * @param {import("..").Bot} client
  */
 module.exports = async (client) => {
     // Events
@@ -35,8 +35,11 @@ module.exports = async (client) => {
 
     // mongoose
     const { MONGO_URI } = require('../config/config.json')
-    if (!MONGO_URI) return console.error("MONGO_URI is not defined in config.json");
-    if (MONGO_URI === "MONGO-CONNECTION-STRING-HERE") return console.error("MONGO_URI is not defined in config.json");
+    if (!MONGO_URI || MONGO_URI === "MONGO-CONNECTION-STRING-HERE") {
+        return error(client.languages.__("errors.bad_mongo_uri"));
+    }
 
-    mongoose.connect(MONGO_URI).then(() => console.log('Connected to mongodb'));
+    mongoose.connect(MONGO_URI).then(() => {
+        success(client.languages.__("system.mongo_connected"));
+    });
 };

@@ -1,5 +1,10 @@
 {
 	"system": {
-		"bot_ready": "Bot is ready"
+		"bot_ready": "Bot is ready",
+		"mongo_connected": "MongoDB connected"
+	},
+	"errors": {
+		"bad_mongo_uri": "MONGO_URI is not set in config.json",
+		"command_not_found": "The {command} command was not found"
 	}
 }
