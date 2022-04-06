@@ -1,0 +1,30 @@
+{
+	"commands": {
+		"ticket_manage": {
+			"no_specify": "No se especificó ningún comando.",
+			"sub_commands": {
+				"setup": {
+					"already_exists": "Ya existe un ticket panel con el ID `{custom_id}`.",
+					"created": "Configuración del panel de tickets con éxito.\n\n{panel_info}"
+				},
+				"delete": {
+					"not_exists": "No existe un ticket panel con el ID `{custom_id}`.",
+					"deleted": "El ticket panel se eliminó con éxito."
+				},
+				"list": {
+					"no_panels": "No hay paneles de tickets configurados.",
+					"description": "**Aquí está una lista de todos los paneles:**",
+					"footer": "Actualmente está en la página {page} de {pages}."
+				}
+			}
+		}
+	},
+	"system": {
+		"bot_ready": "El bot esta listo",
+		"mongo_connected": "MongoDB conectada"
+	},
+	"errors": {
+		"bad_mongo_uri": "MONGO_URI no está configurado en config.json",
+		"command_not_found": "No se encontró el comando {comando}"
+	}
+}
