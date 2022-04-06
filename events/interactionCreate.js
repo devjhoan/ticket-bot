@@ -4,7 +4,7 @@ const client = require("../index");
 client.on("interactionCreate", async (interaction) => {
     // Slash Command Handling
     if (interaction.isCommand()) {
-        const command = client.slashCommands.get(interaction.commandName + ":");
+        const command = client.slashCommands.get(interaction.commandName);
         if (!command) {
             error(`Command ${interaction.commandName} not found`);
             return interaction.reply({ content: client.languages.__mf("errors.command_not_found",{
