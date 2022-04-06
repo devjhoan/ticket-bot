@@ -16,6 +16,7 @@
         "discord-html-transcripts": "^1.0.0",
         "discord.js": "^13.1.0",
         "glob": "^7.1.7",
+        "i18n": "^0.14.2",
         "mongoose": "^6.0.2"
     }
 }
