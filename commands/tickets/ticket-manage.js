@@ -1,4 +1,4 @@
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, MessageEmbed, MessageButton, MessageActionRow, Message } = require("discord.js");
 const paginationEmbed = require("../../controllers/paginationEmbed");
 const dataGuild = require("../../models/dataGuild");
 
@@ -224,6 +224,84 @@ module.exports = {
 				);
 			}
 			paginationEmbed(interaction, embeds, "60s", false);
+		} else if (Sub_Command === "send") {
+			const channel = interaction.options.getChannel("channel") || interaction.channel;
+			const guildData = await dataGuild.findOne({ guildID: interaction.guild.id });
+			
+			if (!guildData) {
+				return interaction.reply({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__mf("commands.ticket_manage.sub_commands.send.no_panels"))
+						.setColor("RED")
+				]});
+			} else if (guildData?.tickets.length === 0) {
+				return interaction.reply({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__mf("commands.ticket_manage.sub_commands.send.no_panels"))
+						.setColor("RED")
+				]});
+			} else {
+				await interaction.deferReply({
+					ephemeral: true
+				});
+				const tickets = guildData.tickets;
+				const components = [];
+				lastComponents = new MessageActionRow;
+				const options = tickets.map((ticket) => {
+					return  {
+						customID: ticket.customID,
+						emoji: ticket.panelEmoji,
+						name: ticket.panelName
+					}
+				});
+				for (const panel of options) {
+					if (panel.emoji !== undefined) {
+						lastComponents.addComponents(
+							new MessageButton()
+								.setCustomId(`ticket-${panel.customID}`)
+								.setEmoji(panel.emoji)
+								.setStyle("SECONDARY")
+						)
+						if (lastComponents.components.length === 5) {
+							components.push(lastComponents);
+							lastComponents = new MessageActionRow();
+						}
+					}
+				}
+				if (lastComponents.components.length > 0) {
+					components.push(lastComponents);
+				}
+				const panels = options.map((x, i) => {
+					return client.languages.__mf("commands.ticket_manage.sub_commands.send.embed_config.separator", {
+						emoji: x.emoji,
+						name: x.name,
+						counter: i + 1
+					});
+				});
+				channel.send({embeds: [
+					new MessageEmbed()
+						.setTitle(client.languages.__("commands.ticket_manage.sub_commands.send.embed_config.title"))
+						.setDescription(client.languages.__mf("commands.ticket_manage.sub_commands.send.embed_config.description", {separator: panels.join("\n")}))
+						.setColor(client.languages.__("commands.ticket_manage.sub_commands.send.embed_config.color"))
+						.setFooter({text: client.languages.__("commands.ticket_manage.sub_commands.send.embed_config.footer")})
+				], components}).then(() => {
+					interaction.followUp({embeds: [
+						new MessageEmbed()
+							.setTitle("Ticket System \✅")
+							.setDescription(client.languages.__("commands.ticket_manage.sub_commands.send.send_success"))
+							.setColor("GREEN")
+					]});
+				})
+			}
+		} else {
+			return interaction.reply({embeds: [
+				new MessageEmbed()
+					.setTitle("Ticket System \❌")
+					.setDescription(client.languages.__("commands.ticket_manage.no_specify"))
+					.setColor("RED")
+			]});
 		}
 	},
 };
