@@ -120,7 +120,10 @@ client.on("interactionCreate", async (interaction) =>  {
 				interaction.editReply({embeds: [
 					new MessageEmbed()
 						.setTitle("Ticket System \✅")
-						.setDescription(client.languages.__("embeds.message_ticket.created"))
+						.setDescription(client.languages.__mf("embeds.message_ticket.created", {
+							channel_mention: `<#${channel.id}>`,
+							channel_id: channel.id
+						}))
 						.setColor("GREEN")
 				]})
 			});
