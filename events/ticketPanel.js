@@ -93,12 +93,12 @@ client.on("interactionCreate", async (interaction) =>  {
 							.setLabel(client.languages.__("buttons.close.text"))
 							.setEmoji(client.languages.__("buttons.close.emoji"))
 							.setStyle(client.languages.__("buttons.close.style"))
-							.setCustomId("close-ticket-open"),
+							.setCustomId("btn-close-ticket-opn"),
 						new MessageButton()
 							.setLabel(client.languages.__("buttons.claim.text"))
 							.setEmoji(client.languages.__("buttons.claim.emoji"))
 							.setStyle(client.languages.__("buttons.claim.style"))
-							.setCustomId("claim-ticket-open")
+							.setCustomId("btn-claim-ticket-opn")
 					)
 				], content: guildData.mentionStaff ? `<@!${interaction.user.id}> | <@&${guildData.mentionStaff}>` : `<@!${interaction.user.id}>`});
 
