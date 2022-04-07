@@ -72,11 +72,7 @@ client.on("interactionCreate", async (interaction) =>  {
 					},
 					...ticketRoles
 				]
-			}).then(async (uwu) => {
-				/**
-				 * @type {TextChannel}
-				 */
-				const channel = uwu;
+			}).then(async (channel) => {
 				channel.send({embeds: [
 					new MessageEmbed()
 						.setTitle(client.languages.__mf("embeds.message_ticket.title", {
@@ -136,5 +132,5 @@ async function getTicketNumber(ticketCounter, guildData, guildID) {
 	await guildData.findOneAndUpdate({ guildID: guildID }, { $inc: { ticketCounter: 1 } });
 	const data = await dataGuild.findOne({ guildID: guildID });
 	const zeroPad = (num, places) => String(num).padStart(places, '0');
-	return `${zeroPad(data.ticketCounter, 4)}`;
+	return zeroPad(data.ticketCounter, 4);
 }
