@@ -1,7 +1,6 @@
 const { glob } = require("glob");
 const { promisify } = require("util");
 const mongoose = require("mongoose");
-const config = require('../config/config.json');
 const { success, error } = require("../controllers/logger");
 
 const globPromise = promisify(glob);
@@ -29,12 +28,12 @@ module.exports = async (client) => {
         arrayOfSlashCommands.push(file);
     });
     client.on("ready", async () => {
-        const guild = client.guilds.cache.get(config["GUILD-ID"]);
+        const guild = client.guilds.cache.get(client.config["GUILD-ID"]);
         guild.commands.set(arrayOfSlashCommands);
     });
 
     // mongoose
-    const { MONGO_URI } = require('../config/config.json')
+    const { MONGO_URI } = client.config;
     if (!MONGO_URI || MONGO_URI === "MONGO-CONNECTION-STRING-HERE") {
         return error(client.languages.__("errors.bad_mongo_uri"));
     }
