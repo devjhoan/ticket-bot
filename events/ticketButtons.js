@@ -71,6 +71,53 @@ client.on("interactionCreate", async (interaction) => {
 						.setStyle(client.languages.__("buttons.delete.style"))
 				)
 			]});
+		} else if (buttonID === "claim-ticket-opn") {
+			await interaction.deferUpdate();
+			const userData = await dataTicket.findOne({
+				guildID: interaction.guild.id,
+				channelID: interaction.channel.id
+			});
+			if (!userData) {
+				return interaction.followUp({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__("errors.channel_without_ticket"))
+						.setColor("RED")
+				], ephemeral: true});
+			}
+			if (userData.isClaimed) {
+				return interaction.followUp({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__("errors.ticket_already_claimed"))
+						.setColor("RED")
+				], ephemeral: true});
+			}
+
+			interaction.channel.permissionOverwrites.edit(interaction.user.id, {
+				MANAGE_CHANNELS: true,
+				VIEW_CHANNEL: true
+			});
+			
+			userData.staffRoles.forEach((user) => {
+				interaction.channel.permissionOverwrites.edit((user), {
+					VIEW_CHANNEL: false
+				});
+			});
+
+			interaction.channel.send({embeds: [
+				new MessageEmbed()
+					.setTitle("Ticket System \✅")
+					.setDescription(client.languages.__mf("buttons.claim.messages.claimed_ticket", {
+						user_mention: `<@${interaction.user.id}>`,
+						user_id: interaction.user.id
+					}))
+					.setColor("GREEN")
+			]});
+			
+			userData.isClaimed = true;
+			userData.staffClaimed = interaction.user.id;
+			await userData.save();
 		}
 	}
 });
