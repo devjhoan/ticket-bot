@@ -52,7 +52,10 @@
 		"claim": {
 			"text": "Claim",
 			"emoji": "👋",
-			"style": "SECONDARY"
+			"style": "SECONDARY",
+			"messages": {
+				"claimed_ticket": "{user_mention} ha reclamado el ticket."
+			}
 		},
 		"transcript": {
 			"text": "Transcript",
@@ -80,6 +83,7 @@
 		"server_without_tickets": "Este servidor no tiene datos para el sistema de tickets.\nPor favor, crea un panel de tickets usando el comando `ticket-manage setup`",
 		"reached_max_tickets": "Has alcanzado el número máximo de tickets permitidos.",
 		"channel_without_ticket": "Este canal no es un canal de ticket.", 
-		"ticket_already_closed": "El ticket ya está cerrado."
+		"ticket_already_closed": "El ticket ya está cerrado.",
+		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario."
 	}
 }
