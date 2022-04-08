@@ -29,8 +29,16 @@ module.exports = async (client) => {
     });
     
     client.on("ready", async () => {
+        if (client.config["GUILD-ID"] === "SERVER_ID") {
+            error("Please set the GUILD-ID in the config.json file");
+            process.exit(1);
+        }
         const guild = client.guilds.cache.get(client.config["GUILD-ID"]);
-        guild.commands.set(arrayOfSlashCommands);
+        try { await guild.commands.set(arrayOfSlashCommands) } 
+        catch (error) {
+            error(error);
+            process.exit(1);
+        }
         success(`Successfully loaded ${arrayOfSlashCommands.length} slash commands`);
         success(client.languages.__("system.bot_ready"));
     });
