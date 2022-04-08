@@ -60,7 +60,11 @@
 		"transcript": {
 			"text": "Transcript",
 			"emoji": "📑",
-			"style": "SECONDARY"
+			"style": "SECONDARY",
+			"messages": {
+				"saving_transcript": "Saving transcript...",
+				"transcript_saved": "Transcript saved successfully!"
+			}
 		},
 		"open": {
 			"text": "Open",
@@ -84,6 +88,7 @@
 		"reached_max_tickets": "You have reached the maximum amount of tickets opened at the same time.",
 		"channel_without_ticket": "This channel is not a ticket channel.",
 		"ticket_already_closed": "This ticket is already closed.",
-		"ticket_already_claimed": "This ticket is already claimed by someone else."
+		"ticket_already_claimed": "This ticket is already claimed by someone else.",
+		"transcript_channel_not_found": "The transcript channel was not found."
 	}
 }

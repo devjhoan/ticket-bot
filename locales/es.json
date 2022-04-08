@@ -60,7 +60,11 @@
 		"transcript": {
 			"text": "Transcript",
 			"emoji": "📑",
-			"style": "SECONDARY"
+			"style": "SECONDARY",
+			"messages": {
+				"saving_transcript": "Guardando transcripción...",
+				"transcript_saved": "Transcripción guardada con éxito."
+			}
 		},
 		"open": {
 			"text": "Abrir",
@@ -84,6 +88,7 @@
 		"reached_max_tickets": "Has alcanzado el número máximo de tickets permitidos.",
 		"channel_without_ticket": "Este canal no es un canal de ticket.", 
 		"ticket_already_closed": "El ticket ya está cerrado.",
-		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario."
+		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario.",
+		"transcript_channel_not_found": "No se encontró el canal de transcripción."
 	}
 }
