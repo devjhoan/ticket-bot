@@ -79,7 +79,7 @@
 			"emoji": "⛔",
 			"style": "SECONDARY",
 			"messages": {
-				"deleting_ticket": "This ticket will be deleted in {time} minutes."
+				"deleting_ticket": "This ticket will be deleted in {time} seconds."
 			}
 		}
 	},
