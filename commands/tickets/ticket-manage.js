@@ -1,4 +1,4 @@
-const { CommandInteraction, MessageEmbed, MessageButton, MessageActionRow, Message } = require("discord.js");
+const { CommandInteraction, MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const paginationEmbed = require("../../controllers/paginationEmbed");
 const dataGuild = require("../../models/dataGuild");
 
