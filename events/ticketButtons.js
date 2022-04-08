@@ -1,6 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js")
 const { createTranscript } = require("discord-html-transcripts");
 const dataTicket = require("../models/dataTicket");
+const dataGuild = require("../models/dataGuild");
 const client = require("..");
 
 client.on("interactionCreate", async (interaction) => {
@@ -201,7 +202,7 @@ client.on("interactionCreate", async (interaction) => {
 				], ephemeral: true});
 			}
 			
-			interaction.permissionOverwrites.edit(userData.ownerID, {
+			interaction.channel.permissionOverwrites.edit(userData.ownerID, {
 				VIEW_CHANNEL: true
 			});
 			interaction.channel.send({embeds:[
@@ -214,6 +215,7 @@ client.on("interactionCreate", async (interaction) => {
 					}))
 					.setColor("GREEN")
 			]}).then(() => {
+				interaction.message.delete();
 				userData.isClosed = false;
 				userData.save();
 			});
