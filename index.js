@@ -1,4 +1,4 @@
-const { warn, error } = require("./controllers/logger");
+const { warn, error, debug } = require("./controllers/logger");
 const { Client, Collection } = require("discord.js");
 const { version } = require('./package.json');
 const { readdirSync } = require("fs");
@@ -23,9 +23,12 @@ class Bot extends Client {
             });
 
         this.commands = new Collection();
+        debug(`Successfully loaded ${locales.length} locales`);
         this.slashCommands = new Collection();
         this.config = require('./config/config.json');
+        debug(`Successfully loaded config`);
         this.languages = require('i18n');
+        debug(`Successfully loaded languages`);
         
         this.languages.configure({
             locales: locales,
@@ -53,6 +56,7 @@ class Bot extends Client {
             }
         });
         this.languages.setLocale(this.config.LANGUAGE);
+        debug(`Successfully set language to ${this.config.LANGUAGE}`);
         this.version = version;
     }
 };
