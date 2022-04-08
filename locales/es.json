@@ -89,6 +89,7 @@
 		"channel_without_ticket": "Este canal no es un canal de ticket.", 
 		"ticket_already_closed": "El ticket ya está cerrado.",
 		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario.",
-		"transcript_channel_not_found": "No se encontró el canal de transcripción."
+		"transcript_channel_not_found": "No se encontró el canal de transcripción.",
+		"ticket_already_open": "El ticket ya está abierto."
 	}
 }

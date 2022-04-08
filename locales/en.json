@@ -89,6 +89,7 @@
 		"channel_without_ticket": "This channel is not a ticket channel.",
 		"ticket_already_closed": "This ticket is already closed.",
 		"ticket_already_claimed": "This ticket is already claimed by someone else.",
-		"transcript_channel_not_found": "The transcript channel was not found."
+		"transcript_channel_not_found": "The transcript channel was not found.",
+		"ticket_already_open": "This ticket is already open."
 	}
 }

@@ -178,6 +178,41 @@ client.on("interactionCreate", async (interaction) => {
 				]});
 			});
 
+		} else if (buttonID === "open-ticket") {
+			await interaction.deferUpdate();
+			const userData = await dataTicket.findOne({
+				guildID: interaction.guild.id,
+				channelID: interaction.channel.id
+			});
+			if (!userData) {
+				return interaction.followUp({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__("errors.channel_without_ticket"))
+						.setColor("RED")
+				], ephemeral: true});
+			}
+			if (!userData.isClosed) {
+				return interaction.followUp({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__("errors.ticket_already_open"))
+						.setColor("RED")
+				], ephemeral: true});
+			}
+			
+			interaction.permissionOverwrites.edit(userData.ownerID, {
+				VIEW_CHANNEL: true
+			});
+			interaction.channel.send({embeds:[
+				new MessageEmbed()
+					.setTitle("Ticket System \✅")
+					.setDescription(client.languages.__("buttons.open.messages.ticket_opened"))
+					.setColor("GREEN")
+			]}).then(() => {
+				userData.isClosed = false;
+				userData.save();
+			});
 		}
 	}
 });
