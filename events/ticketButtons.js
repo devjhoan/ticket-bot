@@ -151,6 +151,7 @@ client.on("interactionCreate", async (interaction) => {
 				new MessageEmbed()
 					.setTitle("Ticket System \✅")
 					.setDescription(client.languages.__("buttons.transcript.messages.saving_transcript"))
+					.setColor("ORANGE")
 			]})
 			const transcript = await createTranscript(interaction.channel, {
 				fileName: `transcript-${interaction.channel.name}.html`,
@@ -169,7 +170,7 @@ client.on("interactionCreate", async (interaction) => {
 					msg.embeds[0]
 						.addField("Panel Name", `${userData.ticketPanel}`, true)
 						.addField("Direct Transcript", `[Direct Transcript](${msg.attachments.first().url})`, true)
-						.addField("Ticket Closed", interaction.user.tag)
+						.addField("Ticket Closed", interaction.user.tag, true)
 						.setColor("GREEN")
 				]});
 				firstMessage.edit({embeds: [
