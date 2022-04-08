@@ -4,6 +4,11 @@ const { version } = require('./package.json');
 const { readdirSync } = require("fs");
 const { join } = require("path");
 
+if (process.version.slice(1).split(".")[0] < 16) {
+    error(`Please update to Node 16 or higher.`);
+    process.exit(1);
+}
+
 /**
  * The Discord client instance
  * @typedef {Bot} Bot
