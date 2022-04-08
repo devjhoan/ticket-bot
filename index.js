@@ -53,8 +53,6 @@ class Bot extends Client {
             }
         });
         this.languages.setLocale(this.config.LANGUAGE);
-
-        /** @type {String} */
         this.version = version;
     }
 };
