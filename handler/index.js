@@ -27,9 +27,12 @@ module.exports = async (client) => {
         if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
         arrayOfSlashCommands.push(file);
     });
+    
     client.on("ready", async () => {
         const guild = client.guilds.cache.get(client.config["GUILD-ID"]);
         guild.commands.set(arrayOfSlashCommands);
+        success(`Successfully loaded ${arrayOfSlashCommands.length} slash commands`);
+        success(client.languages.__("system.bot_ready"));
     });
 
     // mongoose
