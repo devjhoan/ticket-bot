@@ -207,11 +207,50 @@ client.on("interactionCreate", async (interaction) => {
 			interaction.channel.send({embeds:[
 				new MessageEmbed()
 					.setTitle("Ticket System \✅")
-					.setDescription(client.languages.__("buttons.open.messages.ticket_opened"))
+					.setDescription(client.languages.__mf("buttons.open.messages.ticket_opened", {
+						user_mention: `<@${interaction.user.id}>`,
+						user_id: interaction.user.id,
+						user_tag: interaction.user.tag
+					}))
 					.setColor("GREEN")
 			]}).then(() => {
 				userData.isClosed = false;
 				userData.save();
+			});
+		} else if (buttonID === "delete-ticket") {
+			await interaction.deferUpdate();
+			const userData = await dataTicket.findOne({
+				guildID: interaction.guild.id,
+				channelID: interaction.channel.id
+			});
+			if (!userData) {
+				return interaction.followUp({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__("errors.channel_without_ticket"))
+						.setColor("RED")
+				], ephemeral: true});
+			}
+			if (!userData.isClosed) {
+				return interaction.followUp({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \❌")
+						.setDescription(client.languages.__("errors.ticket_already_open"))
+						.setColor("RED")
+				], ephemeral: true});
+			}
+			interaction.channel.send({embeds: [
+				new MessageEmbed()
+					.setTitle("Ticket System \✅")
+					.setDescription(client.languages.__mf("buttons.delete.messages.deleting_ticket", {
+						time: "5"
+					}))
+					.setColor("RED")
+			]}).then(() => {
+				setTimeout(async () => {
+					await interaction.channel.delete();
+					userData.delete();
+				}, 5000);
 			});
 		}
 	}

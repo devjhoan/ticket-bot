@@ -69,12 +69,18 @@
 		"open": {
 			"text": "Abrir",
 			"emoji": "🔓",
-			"style": "SECONDARY"
+			"style": "SECONDARY",
+			"messages" : {
+				"ticket_opened": "{user_mention} ha abierto el ticket."
+			}
 		},
 		"delete": {
 			"text": "Borrar",
 			"emoji": "⛔",
-			"style": "SECONDARY"
+			"style": "SECONDARY",
+			"messages": {
+				"deleting_ticket": "Este ticket será borrado en {time} minutos."
+			}
 		}
 	},
 	"system": {
