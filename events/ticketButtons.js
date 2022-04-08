@@ -146,7 +146,6 @@ client.on("interactionCreate", async (interaction) => {
 						.setColor("RED")
 				], ephemeral: true});
 			}
-			interaction.message.delete();
 			const firstMessage = await interaction.channel.send({embeds: [
 				new MessageEmbed()
 					.setTitle("Ticket System \✅")
