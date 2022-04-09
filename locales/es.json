@@ -36,6 +36,9 @@
 		"remove": {
 			"user_removed": "El usuario {user_mention} fue removido con éxito.",
 			"user_not_in_ticket": "{user_mention} no está en el ticket."
+		},
+		"close": {
+			"closed_by": "{user_mention} ha cerrado el ticket."
 		}
 	},
 	"embeds": {
