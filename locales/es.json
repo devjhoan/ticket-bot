@@ -39,6 +39,9 @@
 		},
 		"close": {
 			"closed_by": "{user_mention} ha cerrado el ticket."
+		},
+		"open": {
+			"opened_by": "{user_mention} ha abierto el ticket."
 		}
 	},
 	"embeds": {
@@ -107,6 +110,7 @@
 		"ticket_already_closed": "El ticket ya está cerrado.",
 		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario.",
 		"transcript_channel_not_found": "No se encontró el canal de transcripción.",
-		"ticket_already_open": "El ticket ya está abierto."
+		"ticket_already_open": "El ticket ya está abierto.",
+		"ticket_not_closed": "El ticket no está cerrado."
 	}
 }
