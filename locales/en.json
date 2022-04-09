@@ -28,6 +28,10 @@
 					}
 				}
 			}
+		},
+		"add": {
+			"success": "The user {user_mention} was added to the ticket.",
+			"user_already_in_ticket": "{user_mention} is already in this ticket."
 		}
 	},
 	"embeds": {
