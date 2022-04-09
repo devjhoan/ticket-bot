@@ -237,7 +237,7 @@ client.on("interactionCreate", async (interaction) => {
 				return interaction.followUp({embeds: [
 					new MessageEmbed()
 						.setTitle("Ticket System \❌")
-						.setDescription(client.languages.__("errors.ticket_already_open"))
+						.setDescription(client.languages.__("errors.ticket_not_closed"))
 						.setColor("RED")
 				], ephemeral: true});
 			}
