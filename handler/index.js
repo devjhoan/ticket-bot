@@ -35,8 +35,8 @@ module.exports = async (client) => {
         }
         const guild = client.guilds.cache.get(client.config["GUILD-ID"]);
         try { await guild.commands.set(arrayOfSlashCommands) } 
-        catch (error) {
-            error(error);
+        catch (error_) {
+            error(error_);
             process.exit(1);
         }
         success(`Successfully loaded ${arrayOfSlashCommands.length} slash commands`);
