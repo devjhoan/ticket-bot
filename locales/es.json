@@ -42,6 +42,13 @@
 		},
 		"open": {
 			"opened_by": "{user_mention} ha abierto el ticket."
+		},
+		"rename": {
+			"success": "{user_mention} has renamed the ticket to {new_name}."
+		},
+		"alert": {
+			"user_message": "Hola, {user_mention}, tienes un [ticket]({link}) abierto y un miembro del personal necesita que lo respondas de inmediato\n\n**Información del ticket**\n » Nombre del ticket: {channel_name}\n » Ticket Desde: {openSince}\n » Enlace del ticket: {direct_link}",
+			"staff_message": "Acabo de enviar un mensaje al usuario, espere a que responda"
 		}
 	},
 	"embeds": {
@@ -84,7 +91,7 @@
 			"text": "Abrir",
 			"emoji": "🔓",
 			"style": "SECONDARY",
-			"messages" : {
+			"messages": {
 				"ticket_opened": "{user_mention} ha abierto el ticket."
 			}
 		},
@@ -106,7 +113,7 @@
 		"command_not_found": "No se encontró el comando {comando}",
 		"server_without_tickets": "Este servidor no tiene datos para el sistema de tickets.\nPor favor, crea un panel de tickets usando el comando `ticket-manage setup`",
 		"reached_max_tickets": "Has alcanzado el número máximo de tickets permitidos.",
-		"channel_without_ticket": "Este canal no es un canal de ticket.", 
+		"channel_without_ticket": "Este canal no es un canal de ticket.",
 		"ticket_already_closed": "El ticket ya está cerrado.",
 		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario.",
 		"transcript_channel_not_found": "No se encontró el canal de transcripción.",
