@@ -32,6 +32,10 @@
 		"add": {
 			"success": "The user {user_mention} was added to the ticket.",
 			"user_already_in_ticket": "{user_mention} is already in this ticket."
+		},
+		"remove": {
+			"user_removed": "The user {user_mention} was removed from the ticket.",
+			"user_not_in_ticket": "{user_mention} is not in this ticket."
 		}
 	},
 	"embeds": {
