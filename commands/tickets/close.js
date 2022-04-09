@@ -36,14 +36,9 @@ module.exports = {
 		});
 
 		ticketData.usersInTicket.forEach(async (id) => {
-			try {
-				await interaction.channel.permissionOverwrites.edit(id, {
-					VIEW_CHANNEL: false
-				});
-			} catch {
-				// no voy a poner nada en consola por q mucha paja 
-				// tambien, xq miras mi codigo?
-			}
+			interaction.channel.permissionOverwrites.edit(id, {
+				VIEW_CHANNEL: false
+			});
 		});
 
 		ticketData.isClosed = true;
