@@ -53,6 +53,11 @@
 		"claim": {
 			"already_claimed": "El ticket ya ha sido reclamado por {user_mention}.",
 			"claimed": "El ticket fue reclamado por {user_mention}."
+		},
+		"giveto": {
+			"ticket_not_claimed": "El ticket no ha sido reclamado.",
+			"ticket_not_claimed_by_you": "El ticket no ha sido reclamado por ti.",
+			"ticket_given_to": "{author_mention} ha dado el ticket a {user_mention}."
 		}
 	},
 	"embeds": {
