@@ -53,6 +53,11 @@
 		"claim": {
 			"already_claimed": "This ticket is already claimed by {user_mention}.",
 			"claimed": "This ticket is now claimed by {user_mention}."
+		},
+		"giveto": {
+			"ticket_not_claimed": "This ticket is not claimed.",
+			"ticket_not_claimed_by_you": "This ticket is not claimed by you.",
+			"ticket_given_to": "{author_mention} has given the ticket to {user_mention}."
 		}
 	},
 	"embeds": {
