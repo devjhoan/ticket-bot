@@ -1,4 +1,5 @@
 const { CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { havePerms } = require("../../controllers/ticketChecks");
 const dataGuild = require("../../models/dataGuild");
 
 module.exports = {
@@ -12,6 +13,7 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	run: async (client, interaction, args) => {
+		if (!(await havePerms(interaction))) return;
 		let transcript_channel, staff_role, staff_mention;
 		await interaction.reply({embeds: [
 			new MessageEmbed()
@@ -37,6 +39,10 @@ module.exports = {
 						.setLabel("Staff Mention")
 						.setStyle("PRIMARY")
 						.setCustomId("config-staff-mention"),
+					new MessageButton()
+						.setEmoji("👀")
+						.setStyle("PRIMARY")
+						.setCustomId("config-show"),
 					new MessageButton()
 						.setEmoji("✖️")
 						.setStyle("DANGER")
@@ -356,6 +362,49 @@ module.exports = {
 						.setDescription("You have canceled the process!")
 						.setColor("RED")
 						.setFooter({text: "Ticket System by: Jhoan#6969", iconURL: client.user.displayAvatarURL({dynamic: true})})
+				], components: []});
+			} else if (button === "show") {
+				collector.stop();
+				const guildData = await dataGuild.findOne({
+					guildID: interaction.guild.id
+				});
+				if (!guildData) {
+					return interaction.editReply({embeds: [
+						new MessageEmbed()
+							.setTitle("Ticket System \🔴")
+							.setDescription("This server doesn't have configurated the ticket system!")
+							.setColor("RED")
+							.setFooter({text: "Ticket System by: Jhoan#6969", iconURL: client.user.displayAvatarURL({dynamic: true})})
+					], components: []});
+				}
+				const data = {
+					transcript_channel: guildData.transcriptChannel || "Not setted",
+					staff_role: guildData.staffRole || "Not setted",
+					staff_mention: guildData.mentionStaff || "Not setted",
+				}
+				return interaction.editReply({embeds: [
+					new MessageEmbed()
+						.setColor("GREEN")
+						.setTitle("Ticket System \✅")
+						.setDescription("Here is the current configurated data:")
+						.setFooter({text: "Ticket System by: Jhoan#6969", iconURL: client.user.displayAvatarURL({dynamic: true})})
+						.addFields([
+							{
+								name: "Transcript Channel 📚",
+								value: data.transcript_channel,
+								inline: false
+							},
+							{
+								name: "Staff Role 👤",
+								value: data.staff_role,
+								inline: false
+							},
+							{
+								name: "Staff Mention 🗣️",
+								value: data.staff_mention,
+								inline: false
+							}
+						])
 				], components: []});
 			}
 		});
