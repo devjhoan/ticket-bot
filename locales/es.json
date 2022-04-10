@@ -49,6 +49,10 @@
 		"alert": {
 			"user_message": "Hola, {user_mention}, tienes un [ticket]({link}) abierto y un miembro del personal necesita que lo respondas de inmediato\n\n**Información del ticket**\n » Nombre del ticket: {channel_name}\n » Ticket Desde: {openSince}\n » Enlace del ticket: {direct_link}",
 			"staff_message": "Acabo de enviar un mensaje al usuario, espere a que responda"
+		},
+		"claim": {
+			"already_claimed": "El ticket ya ha sido reclamado por {user_mention}.",
+			"claimed": "El ticket fue reclamado por {user_mention}."
 		}
 	},
 	"embeds": {
