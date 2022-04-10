@@ -127,6 +127,8 @@
 		"ticket_already_claimed": "El ticket ya está reclamado por otro usuario.",
 		"transcript_channel_not_found": "No se encontró el canal de transcripción.",
 		"ticket_already_open": "El ticket ya está abierto.",
-		"ticket_not_closed": "El ticket no está cerrado."
+		"ticket_not_closed": "El ticket no está cerrado.",
+		"no_staff_role": "Este servidor no tiene configurado un rol de personal.\nUtilice el comando `config` para configurar el rol de personal.",
+		"no_permission": "Usted no tiene permiso para ejecutar este comando."
 	}
 }

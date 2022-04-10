@@ -1,5 +1,4 @@
 const { CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const { havePerms } = require("../../controllers/ticketChecks");
 const dataGuild = require("../../models/dataGuild");
 
 module.exports = {
@@ -13,7 +12,6 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	run: async (client, interaction, args) => {
-		if (!(await havePerms(interaction))) return;
 		let transcript_channel, staff_role, staff_mention;
 		await interaction.reply({embeds: [
 			new MessageEmbed()
