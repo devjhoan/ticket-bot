@@ -127,6 +127,8 @@
 		"ticket_already_claimed": "This ticket is already claimed by someone else.",
 		"transcript_channel_not_found": "The transcript channel was not found.",
 		"ticket_already_open": "This ticket is already open.",
-		"ticket_not_closed": "This ticket is not closed."
+		"ticket_not_closed": "This ticket is not closed.",
+		"no_staff_role": "This server has no set up a staff role.\nPlease use `config` command to setup the staff role.",
+		"no_permission": "You don't have permission to use this command."
 	}
 }

@@ -1,4 +1,5 @@
 const { error } = require("../controllers/logger");
+const { havePerms } = require("../controllers/ticketChecks");
 const client = require("../index");
 
 client.on("interactionCreate", async (interaction) => {
@@ -24,6 +25,7 @@ client.on("interactionCreate", async (interaction) => {
         }
         
         interaction.member = interaction.guild.members.cache.get(interaction.user.id);
+        if (!(await havePerms(interaction))) return;
         command.run(client, interaction, args);
     }
 });
