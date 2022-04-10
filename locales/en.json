@@ -49,6 +49,10 @@
 		"alert": {
 			"user_message": "Hello {user_mention} you have an open [ticket]({link}) and a staff member needs you to respond to it immediately\n\n**Ticket Information**\n » Ticket Name: {channel_name}\n » Ticket Since: {openSince}\n » Ticket Link: {direct_link}",
 			"staff_message": "I just sent a message to the user, please wait for him to reply"
+		},
+		"claim": {
+			"already_claimed": "This ticket is already claimed by {user_mention}.",
+			"claimed": "This ticket is now claimed by {user_mention}."
 		}
 	},
 	"embeds": {
