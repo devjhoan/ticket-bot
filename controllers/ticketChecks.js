@@ -43,7 +43,7 @@ async function havePerms(interaction) {
 	const guildData = await dataGuild.findOne({
 		guildID: interaction.guild.id
 	});
-	if (!guildData) {
+	if (!guildData && !interaction.member.permissions.has("ADMINISTRATOR")) {
 		interaction.reply({embeds: [
 			new MessageEmbed()
 				.setTitle("Ticket System \❌")
@@ -53,7 +53,7 @@ async function havePerms(interaction) {
 		]});
 		return false;
 	}
-	if (!guildData.staffRole && !interaction.member.permissions.has("ADMINISTRATOR")) {
+	if (!guildData?.staffRole && !interaction.member.permissions.has("ADMINISTRATOR")) {
 		interaction.reply({embeds: [
 			new MessageEmbed()
 				.setTitle("Ticket System \❌")
@@ -64,7 +64,7 @@ async function havePerms(interaction) {
 		return false;
 	}
 
-	if (!interaction.member.roles.cache.has(guildData.staffRole) && !interaction.member.permissions.has("ADMINISTRATOR")) {
+	if (!interaction.member.roles.cache.has(guildData?.staffRole) && !interaction.member.permissions.has("ADMINISTRATOR")) {
 		interaction.reply({embeds: [
 			new MessageEmbed()
 				.setTitle("Ticket System \❌")
