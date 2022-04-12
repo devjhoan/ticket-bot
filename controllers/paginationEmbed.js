@@ -1,6 +1,7 @@
 const { 
     MessageActionRow, 
     MessageButton,
+    MessageEmbed,
     CommandInteraction
 } = require("discord.js")
 const ms = require("ms")
