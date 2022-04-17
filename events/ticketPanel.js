@@ -1,4 +1,4 @@
-const { MessageEmbed, TextChannel, MessageActionRow, MessageButton } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const client = require("../index");
 const dataGuild = require("../models/dataGuild");
 const dataTicket = require("../models/dataTicket");
@@ -57,6 +57,7 @@ client.on("interactionCreate", async (interaction) =>  {
 						.setColor("RED")
 				]});
 			}
+
 			const ticketNumber = await getTicketNumber(guildData.ticketCounter, dataGuild, interaction.guild.id);
 			await interaction.guild.channels.create(`ticket-${ticketNumber}`, {
 				type: "text",
@@ -102,6 +103,16 @@ client.on("interactionCreate", async (interaction) =>  {
 					)
 				], content: guildData.mentionStaff ? `<@!${interaction.user.id}> | <@&${guildData.mentionStaff}>` : `<@!${interaction.user.id}>`});
 
+				interaction.editReply({embeds: [
+					new MessageEmbed()
+						.setTitle("Ticket System \✅")
+						.setDescription(client.languages.__mf("embeds.message_ticket.created", {
+							channel_mention: `<#${channel.id}>`,
+							channel_id: channel.id
+						}))
+						.setColor("GREEN")
+				]});
+
 				const newTicket = new dataTicket({
 					guildID: interaction.guild.id,
     				ownerID: interaction.user.id,
@@ -116,16 +127,6 @@ client.on("interactionCreate", async (interaction) =>  {
     				staffRoles: ticketRoles.map(x => x.id),
 				});
 				await newTicket.save();
-
-				interaction.editReply({embeds: [
-					new MessageEmbed()
-						.setTitle("Ticket System \✅")
-						.setDescription(client.languages.__mf("embeds.message_ticket.created", {
-							channel_mention: `<#${channel.id}>`,
-							channel_id: channel.id
-						}))
-						.setColor("GREEN")
-				]})
 			});
 		}
 	}
