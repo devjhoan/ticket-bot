@@ -1,4 +1,5 @@
 const { warn, error, debug } = require("./controllers/logger");
+const { connect } = require('mongoose');
 const { Client, Collection } = require("discord.js");
 const { version } = require('./package.json');
 const { readdirSync } = require("fs");
@@ -63,6 +64,16 @@ class Bot extends Client {
         this.languages.setLocale(this.config.LANGUAGE);
         debug(`Successfully set language to ${this.config.LANGUAGE}`);
         this.version = version;
+        if (this.config.MONGO_URI === "MONGO_URI_HERE") {
+            error(this.languages.__("errors.bad_mongo_uri"));
+            process.exit(1);
+        }
+
+        this.mongoose = connect(this.config.MONGO_URI).then(() => {
+            success(this.languages.__("system.mongo_connected"));
+        }).catch((error_) => {
+            error(error_);
+        });
     }
 };
 

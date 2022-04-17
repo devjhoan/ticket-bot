@@ -1,8 +1,6 @@
 const { glob } = require("glob");
 const { promisify } = require("util");
-const mongoose = require("mongoose");
 const { success, error } = require("../controllers/logger");
-
 const globPromise = promisify(glob);
 
 /**
@@ -41,15 +39,5 @@ module.exports = async (client) => {
         }
         success(`Successfully loaded ${arrayOfSlashCommands.length} slash commands`);
         success(client.languages.__("system.bot_ready"));
-    });
-
-    // mongoose
-    const { MONGO_URI } = client.config;
-    if (!MONGO_URI || MONGO_URI === "MONGO-CONNECTION-STRING-HERE") {
-        return error(client.languages.__("errors.bad_mongo_uri"));
-    }
-
-    mongoose.connect(MONGO_URI).then(() => {
-        success(client.languages.__("system.mongo_connected"));
     });
 };
